@@ -64,6 +64,17 @@ mapper' registerAssignment stringsMap tac =
                     la <> " " <> show (Register "a0") <> " " <> getStringKey c <> "\n" <>
                     syscall 4
 
+                -- print 111
+                Constant (c, BigIntTAC) ->
+                    li <> " " <> show (Register "a0") <> " " <> c <> "\n" <>
+                    syscall 1
+
+                Constant (c, SmallIntTAC) ->
+                    li <> " " <> show (Register "a0") <> " " <> c <> "\n" <>
+                    syscall 1
+
+                _ -> error $ show e
+
         _ -> red <> bold <> show tac <> " # not implemented yet" <> nocolor
 
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
