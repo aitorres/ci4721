@@ -6,7 +6,7 @@ import Data.List                                  (intercalate)
 import Data.Maybe                                 (catMaybes)
 import Data.Monoid                                ((<>))
 import FireLink.BackEnd.CodeGenerator             (OperandType, SimpleType (..),
-                                                   TAC)
+                                                   TAC, TACSymEntry (..))
 import FireLink.BackEnd.RegisterAllocationProcess (Register (..),
                                                    RegisterAssignment)
 import FireLink.Utils                             (bold, nocolor, red)
@@ -15,7 +15,7 @@ import TACType
 import qualified Data.Map
 import qualified Data.Set
 
-tab, add, addi, li, jal, jr, la :: String
+tab, add, addi, li, jal, jr, la, move :: String
 tab = replicate 4 ' '
 add = tab <> "add"
 addi = tab <> "addi"
@@ -23,6 +23,7 @@ li = tab <> "li"
 jal = tab <> "jal"
 jr = tab <> "jr"
 la = tab <> "la"
+move = tab <> "move"
 
 syscall :: Int -> String
 syscall code =
@@ -71,6 +72,12 @@ mapper' registerAssignment stringsMap tac =
 
                 Constant (c, SmallIntTAC) ->
                     li <> " " <> show (Register "a0") <> " " <> c <> "\n" <>
+                    syscall 1
+
+                -- we assume for the moment that if we want to print a temporal we will print
+                -- an integer
+                Id (TACTemporal tempId _) ->
+                    move <> " " <> show (Register "a0") <> " " <> getValue e <> "\n" <>
                     syscall 1
 
                 _ -> error $ show e
