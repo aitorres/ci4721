@@ -5,37 +5,47 @@ where
 import Data.List                                  (intercalate)
 import Data.Maybe                                 (catMaybes)
 import Data.Monoid                                ((<>))
-import FireLink.BackEnd.CodeGenerator             (OperandType, TAC)
+import FireLink.BackEnd.CodeGenerator             (OperandType, SimpleType (..),
+                                                   TAC)
 import FireLink.BackEnd.RegisterAllocationProcess (Register (..),
                                                    RegisterAssignment)
 import FireLink.Utils                             (bold, nocolor, red)
 import TACType
 
 import qualified Data.Map
+import qualified Data.Set
 
-tab, add, addi, syscall, li, jal, jr :: String
+tab, add, addi, li, jal, jr, la :: String
 tab = replicate 4 ' '
 add = tab <> "add"
 addi = tab <> "addi"
-syscall = tab <> "syscall"
 li = tab <> "li"
 jal = tab <> "jal"
 jr = tab <> "jr"
+la = tab <> "la"
 
-mapper' :: RegisterAssignment -> TAC -> String
-mapper' registerAssignment tac =
+syscall :: Int -> String
+syscall code =
+    li <> " " <> show (Register "v0") <> " " <> show code <> "\n" <> tab <> "syscall"
+
+mapper' :: RegisterAssignment -> Data.Map.Map String String -> TAC -> String
+mapper' registerAssignment stringsMap tac =
     let getValue :: OperandType -> String
         getValue (Id x)            = show $ registerAssignment Data.Map.! x
         getValue (Constant (x, _)) = x
+
+        getStringKey :: String -> String
+        getStringKey = (Data.Map.!) stringsMap
+
         in
     case tac of
         ThreeAddressCode Add (Just x) (Just y) (Just z) ->
             add <> " " <> getValue x  <> " " <> getValue y <> " " <> getValue z
 
-        t@(ThreeAddressCode NewLabel Nothing (Just label) Nothing) -> show t
+        (ThreeAddressCode NewLabel Nothing (Just label) Nothing) ->
+            show label <> ":"
 
-        ThreeAddressCode Exit Nothing Nothing Nothing ->
-            li <> " " <> show (Register "v0") <> " 10" <> "\n" <> syscall
+        ThreeAddressCode Exit Nothing Nothing Nothing -> syscall 10
 
         ThreeAddressCode Call Nothing (Just l) (Just n) ->
             jal <> " " <> show l
@@ -45,6 +55,14 @@ mapper' registerAssignment tac =
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
             li <> " " <> getValue x <> " " <> getValue y
+
+        ThreeAddressCode Print Nothing (Just e) Nothing ->
+            case e of
+
+                -- print "my string"
+                Constant (c, StringTAC) ->
+                    la <> " " <> show (Register "a0") <> " " <> getStringKey c <> "\n" <>
+                    syscall 4
 
         _ -> red <> bold <> show tac <> " # not implemented yet" <> nocolor
 
@@ -88,4 +106,29 @@ mapper' registerAssignment tac =
 
 
 mapper :: RegisterAssignment -> [TAC] -> [String]
-mapper = map . mapper'
+mapper regAssignment tacs = dataSegment <> textSegment
+    where
+        getString :: TAC -> [String]
+        getString (ThreeAddressCode _ a b c) =
+            let operands = catMaybes [a, b, c]
+                f op = case op of
+                    Constant (s, StringTAC) -> [s]
+                    _                       -> []
+                in concatMap f operands
+
+        allStrings :: [String]
+        allStrings = Data.Set.toList $ Data.Set.fromList $ concatMap getString tacs
+
+        stringsMap :: Data.Map.Map String String
+        stringsMap =
+            let keys = map (("string" <>) . show) [1 .. length allStrings]
+                values = allStrings
+                in Data.Map.fromList $ zip values keys
+
+        textSegment :: [String]
+        textSegment = ".text" : map (mapper' regAssignment stringsMap) tacs
+
+
+        dataSegment :: [String]
+        dataSegment = [".data"] <>
+            map (\(value, key) -> key <> ": .asciiz \"" <> value <> "\"") (Data.Map.toList stringsMap)
