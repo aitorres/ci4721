@@ -17,7 +17,7 @@ numberList = zip [0..]
 -- | List of available registers for non-float operations on MIPS32
 availableRegisters :: Set.Set String
 availableRegisters = Set.fromList [
-    "a0", "a1", "a2", "a3",
+    -- "a0", "a1", "a2", "a3", TODO: syscall operations uses these registers and are not handled in use and def functions yet
     "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9",
     "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7"
     ]

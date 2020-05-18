@@ -20,13 +20,13 @@ import           System.Environment                 (getArgs)
 import           System.Exit                        (exitFailure, exitSuccess)
 import           System.FilePath                    (takeExtension)
 
-import           Data.Map.Internal.Debug            (showTree)
-import           Data.Semigroup                     ((<>))
+import           Data.Map.Internal.Debug (showTree)
+import           Data.Semigroup          ((<>))
 import           Options.Applicative
-import           System.IO                          (IOMode (..), hGetContents,
-                                                     hPutStr, openFile, stderr)
-import qualified TACType                            as TAC
-import           Text.Printf                        (printf)
+import           System.IO               (IOMode (..), hGetContents, hPutStr,
+                                          openFile, stderr)
+import qualified TACType                 as TAC
+import           Text.Printf             (printf)
 
 printErr :: String -> IO ()
 printErr = hPutStr stderr
@@ -292,37 +292,38 @@ printInterferenceGraph'' (vertexMap, graph) registerAssignment = do
 compile :: String -> CommandLineArgs -> IO ()
 compile program args = do
     compilerResult <- frontEnd program
-    print args
     case compilerResult of
         Left e -> uncurry handleCompileError e >> exitFailure
         Right (ast, symTable, tokens) -> do
-            ((numberedBlocks, flowGraph), interferenceGraph, registerAssignment) <- backend ast (ST.stDict symTable)
-            when (anyArg args) $ do
-                -- Default behavior: print everything
-                putStrLn "\nFireLink: Printing SymTable"
-                prettyPrintSymTable symTable
-                putStrLn "\nFireLink: Printing recognized program"
-                printProgram True tokens
-                putStrLn "\nFireLink: Printing Intermediate Representation in Three-Address Code"
-                printTacCode $ concatMap snd numberedBlocks
-                putStrLn "\nFireLink: Printing basic blocks (numbered, starting at 0)"
-                printBasicBlocks numberedBlocks
-                putStrLn "\nFireLink: Printing flow graph"
-                printFlowGraph flowGraph
-                putStrLn "FireLink: printing register assignment with interference graph"
-                printInterferenceGraph'' interferenceGraph registerAssignment
-                return ()
-            when (showSymTable args && showProgram args) $ prettyPrintSymTable symTable >> printProgram True tokens
-            when (showSymTable args) $ prettyPrintSymTable symTable
-            when (showProgram args) $ printProgram True tokens
-            when (showTac args) $ printTacCode $ concatMap snd numberedBlocks
-            when (showBlocks args) $ printBasicBlocks numberedBlocks
-            when (showGraph args) $ printFlowGraph flowGraph
-            when (showRegisterAssignment args) $ printInterferenceGraph'' interferenceGraph registerAssignment
-            exitSuccess
+            ((numberedBlocks, flowGraph), interferenceGraph, registerAssignment, finalCode) <- backend ast (ST.stDict symTable)
+            if showTargetCode args then putStr $ unlines finalCode
+            else do
+                when (anyArg args) $ do
+                    -- Default behavior: print everything
+                    putStrLn "\nFireLink: Printing SymTable"
+                    prettyPrintSymTable symTable
+                    putStrLn "\nFireLink: Printing recognized program"
+                    printProgram True tokens
+                    putStrLn "\nFireLink: Printing Intermediate Representation in Three-Address Code"
+                    printTacCode $ concatMap snd numberedBlocks
+                    putStrLn "\nFireLink: Printing basic blocks (numbered, starting at 0)"
+                    printBasicBlocks numberedBlocks
+                    putStrLn "\nFireLink: Printing flow graph"
+                    printFlowGraph flowGraph
+                    putStrLn "FireLink: printing register assignment with interference graph"
+                    printInterferenceGraph'' interferenceGraph registerAssignment
+                    return ()
+                when (showSymTable args && showProgram args) $ prettyPrintSymTable symTable >> printProgram True tokens
+                when (showSymTable args) $ prettyPrintSymTable symTable
+                when (showProgram args) $ printProgram True tokens
+                when (showTac args) $ printTacCode $ concatMap snd numberedBlocks
+                when (showBlocks args) $ printBasicBlocks numberedBlocks
+                when (showGraph args) $ printFlowGraph flowGraph
+                when (showRegisterAssignment args) $ printInterferenceGraph'' interferenceGraph registerAssignment
+                exitSuccess
 
 anyArg :: CommandLineArgs -> Bool
-anyArg args = all not $ map (\f -> f args) [showSymTable, showProgram, showTac, showBlocks, showGraph, showRegisterAssignment]
+anyArg args = all not $ map ($ args) [showSymTable, showProgram, showTac, showBlocks, showGraph, showRegisterAssignment, showTargetCode]
 
 data CommandLineArgs = CommandLineArgs
     { filename :: String
@@ -332,6 +333,7 @@ data CommandLineArgs = CommandLineArgs
     , showBlocks :: Bool
     , showGraph :: Bool
     , showRegisterAssignment :: Bool
+    , showTargetCode :: Bool
     }
     deriving Show
 
@@ -366,6 +368,9 @@ commandLineParser =
             ( long "register"
             <> short 'r'
             <> help "Print register assignment" )
+        <*> switch
+            ( long "target-code"
+            <> help "Print Target Code" )
 
 compiler :: CommandLineArgs -> IO ()
 compiler commandLineArgs = do

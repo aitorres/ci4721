@@ -3,42 +3,42 @@ module FireLink.BackEnd.BackEndCompiler (
     def, use
 ) where
 
-import           Control.Monad.RWS                          (runRWST)
-import           Control.Monad.State
-import           Data.Graph                                 (Graph)
-import qualified Data.Graph                                 as G
-import           Data.List                                  (intercalate)
-import qualified Data.Map                                   as Map
-import           FireLink.BackEnd.CodeGenerator             (CodeGenState (..),
-                                                             SimpleType (..),
-                                                             TAC (..),
-                                                             TACSymEntry (..),
-                                                             genCode,
-                                                             initialState)
-import           FireLink.BackEnd.FlowGraphGenerator        (FlowGraph,
-                                                             NumberedBlock,
-                                                             generateFlowGraph)
-import           FireLink.BackEnd.InstructionCodeGenerator
-import           FireLink.BackEnd.LivenessAnalyser
-import           FireLink.BackEnd.Optimizer                 (optimize)
-import           FireLink.BackEnd.RegisterAllocationProcess
-import           FireLink.FrontEnd.Grammar                  (Program (..))
-import           FireLink.FrontEnd.SymTable                 (Dictionary (..))
-import           FireLink.Utils
-import           TACType
+import Control.Monad.RWS                          (runRWST)
+import Control.Monad.State
+import Data.Graph                                 (Graph)
+import Data.List                                  (intercalate)
+import Data.Map.Internal.Debug                    (showTree)
+import FireLink.BackEnd.CodeGenerator             (CodeGenState (..),
+                                                   SimpleType (..), TAC (..),
+                                                   TACSymEntry (..), genCode,
+                                                   initialState)
+import FireLink.BackEnd.FlowGraphGenerator        (FlowGraph, NumberedBlock,
+                                                   generateFlowGraph)
+import FireLink.BackEnd.InstructionCodeGenerator
+import FireLink.BackEnd.LivenessAnalyser
+import FireLink.BackEnd.Optimizer                 (optimize)
+import FireLink.BackEnd.RegisterAllocationProcess
+import FireLink.BackEnd.TargetCodeGenerator
+import FireLink.FrontEnd.Grammar                  (Program (..))
+import FireLink.FrontEnd.SymTable                 (Dictionary (..))
+import FireLink.Utils
+import TACType
 
-import           Data.Map.Internal.Debug                    (showTree)
+import qualified Data.Graph as G
+import qualified Data.Map   as Map
 
-backend :: Program -> Dictionary -> IO (FlowGraph, InterferenceGraph, RegisterAssignment)
+backend :: Program -> Dictionary -> IO (FlowGraph, InterferenceGraph, RegisterAssignment, [String])
 backend program dictionary = do
     (_, finalState, code) <- runRWST (genCode program) dictionary initialState
     let postProcessedCode = fillEmptyTemporals (cgsTemporalsToReplace finalState) code
     let optimizedCode = optimize postProcessedCode
     let flowGraph@(numberedBlocks, graph) = generateFlowGraph optimizedCode
 
-    (registerAssignment, finalFlowGraph) <- run flowGraph dictionary
+    (registerAssignment, finalFlowGraph@(finalBlocks, _)) <- run flowGraph dictionary
     let (interferenceGraph'', _) = generateInterferenceGraph' finalFlowGraph
-    return (finalFlowGraph, interferenceGraph'', registerAssignment)
+
+    let finalCode = mapper registerAssignment $ concatMap snd finalBlocks
+    return (finalFlowGraph, interferenceGraph'', registerAssignment, finalCode)
     where
         fillEmptyTemporals :: [(TACSymEntry, Int)] -> [TAC] -> [TAC]
         fillEmptyTemporals tempsToReplace = map (patchTac tempsToReplace)

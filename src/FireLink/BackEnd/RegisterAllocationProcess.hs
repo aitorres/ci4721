@@ -533,10 +533,7 @@ run flowGraph dict = State.evalStateT go initialState
             simplify
             spilledVertices <- getSpilledVertices
 
-            State.liftIO $ putStrLn $ Set.showTree spilledVertices
-            (vertexToVarMap, _) <- getInterferenceGraph
-            State.lift $ putStrLn $ Set.showTree $ Set.map (vertexToVarMap Map.!) spilledVertices
-            -- | We successfully found an assignment of registers that didn't caused spills
+            -- We successfully found an assignment of registers that didn't caused spills
             if Set.null spilledVertices then
                 select
             else spill >> go
