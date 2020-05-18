@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ecdac1aef0d0d81eb79452302af696ff81357e2458f2a713326522c7cfe622e8
+-- hash: 42e77f6630a6409456f6c5ac997254cdb2f80165eff483dcbbc8632ad12fa04d
 
 name:           firelink
 version:        0.2.0.0
@@ -35,6 +35,7 @@ library
       FireLink.BackEnd.LivenessAnalyser
       FireLink.BackEnd.Optimizer
       FireLink.BackEnd.RegisterAllocationProcess
+      FireLink.BackEnd.TargetCodeGenerator
       FireLink.BackEnd.Utils
       FireLink.FrontEnd.Errors
       FireLink.FrontEnd.FrontEndCompiler

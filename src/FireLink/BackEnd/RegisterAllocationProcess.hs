@@ -54,7 +54,7 @@ availableColors = Set.map Register availableRegisters
 
 -- | Associate a variable with a color (register). If the variable isn't in the
 -- | map we can say that it needs to be spilled
-type RegisterAssignment = Map.Map TACSymEntry Color
+type RegisterAssignment = Map.Map TACSymEntry Register
 
 
 -- | Coloration state for the optimistic coloring algorithm by Chaitan/Briggs, as exposed
