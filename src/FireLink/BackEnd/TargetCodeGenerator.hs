@@ -38,6 +38,9 @@ mapper' registerAssignment stringsMap tac =
         getStringKey :: String -> String
         getStringKey = (Data.Map.!) stringsMap
 
+        liToReg :: String -> String -> String
+        liToReg r c = li <> " " <> show (Register r) <> " " <> c <> "\n"
+
         in
     case tac of
         ThreeAddressCode Add (Just x) (Just y) (Just z) ->
@@ -65,13 +68,18 @@ mapper' registerAssignment stringsMap tac =
                     la <> " " <> show (Register "a0") <> " " <> getStringKey c <> "\n" <>
                     syscall 4
 
+                -- print 'c'
+                Constant (c, CharTAC) ->
+                    liToReg "a0" c <>
+                    syscall 11
+
                 -- print 111
                 Constant (c, BigIntTAC) ->
-                    li <> " " <> show (Register "a0") <> " " <> c <> "\n" <>
+                    liToReg "a0" c <>
                     syscall 1
 
                 Constant (c, SmallIntTAC) ->
-                    li <> " " <> show (Register "a0") <> " " <> c <> "\n" <>
+                    liToReg "a0" c <>
                     syscall 1
 
                 -- we assume for the moment that if we want to print a temporal we will print
