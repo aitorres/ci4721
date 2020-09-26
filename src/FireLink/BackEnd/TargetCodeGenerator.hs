@@ -58,7 +58,7 @@ mapper' registerAssignment stringsMap tac =
             jr <> " $ra"
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
-            li <> " " <> getValue x <> " " <> getValue y
+            liToReg (getValue x) (getValue y)
 
         ThreeAddressCode Print Nothing (Just e) Nothing ->
             case e of
@@ -82,15 +82,16 @@ mapper' registerAssignment stringsMap tac =
                     liToReg "a0" c <>
                     syscall 1
 
+                -- print 1.5
+                -- this would use syscall 2
+                Constant (c, FloatTAC) ->
+                    red <> bold <> "print " <> c <> " # not implemented yet" <> nocolor
+
                 -- we assume for the moment that if we want to print a temporal we will print
                 -- an integer
                 Id (TACTemporal tempId _) ->
                     move <> " " <> show (Register "a0") <> " " <> getValue e <> "\n" <>
                     syscall 1
-
-                _ -> error $ show e
-
-        _ -> red <> bold <> show tac <> " # not implemented yet" <> nocolor
 
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
@@ -124,12 +125,19 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Call Nothing (Just l) (Just n) ->
         -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
         -- ThreeAddressCode Read Nothing (Just e) Nothing ->
-        -- ThreeAddressCode Print Nothing (Just e) Nothing ->
         -- ThreeAddressCode Return Nothing Nothing Nothing ->
         -- ThreeAddressCode Return Nothing (Just t) Nothing ->
-        -- ThreeAddressCode Exit Nothing Nothing Nothing ->
-        -- ThreeAddressCode Abort Nothing Nothing Nothing ->
 
+        -- exit (success)
+        ThreeAddressCode Exit _ _ _ ->
+            syscall 10
+
+        -- exit (failure, exit code = 1)
+        ThreeAddressCode Abort _ _ _ ->
+            liToReg "a0" "1" <>
+            syscall 17
+
+        _ -> red <> bold <> show tac <> " # not implemented yet" <> nocolor
 
 mapper :: RegisterAssignment -> [TAC] -> [String]
 mapper regAssignment tacs = dataSegment <> textSegment
