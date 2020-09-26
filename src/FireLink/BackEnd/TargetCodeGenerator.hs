@@ -15,15 +15,19 @@ import TACType
 import qualified Data.Map
 import qualified Data.Set
 
-tab, add, addi, li, jal, jr, la, move :: String
+tab, add, addi, sub, subs, li, lis, jal, jr, la, move, zero :: String
 tab = replicate 4 ' '
 add = tab <> "add"
 addi = tab <> "addi"
+sub = tab <> "sub"
+subs = tab <> "sub.s"
 li = tab <> "li"
+lis = tab <> "li.s"
 jal = tab <> "jal"
 jr = tab <> "jr"
 la = tab <> "la"
 move = tab <> "move"
+zero = "$zero"
 
 syscall :: Int -> String
 syscall code =
@@ -39,17 +43,33 @@ mapper' registerAssignment stringsMap tac =
         getStringKey = (Data.Map.!) stringsMap
 
         liToReg :: String -> String -> String
-        liToReg r c = li <> " " <> show (Register r) <> " " <> c <> "\n"
+        liToReg r c = li <> " " <> r <> " " <> c <> "\n"
 
         in
     case tac of
         ThreeAddressCode Add (Just x) (Just y) (Just z) ->
             add <> " " <> getValue x  <> " " <> getValue y <> " " <> getValue z
 
+        ThreeAddressCode Minus (Just x) (Just y) Nothing ->
+            case y of
+
+                Constant (c, BigIntTAC) ->
+                    sub <> " " <> getValue x <> " " <> zero <> " " <> c
+
+                Constant (c, SmallIntTAC) ->
+                    sub <> " " <> getValue x <> " " <> zero <> " " <> c
+
+                Constant (c, FloatTAC) ->
+                    subs <> " " <> getValue x <> " " <> zero <> " " <> c
+
+                -- always integer
+                Id (TACTemporal _ _) ->
+                    sub <> " " <> getValue x <> " " <> zero <> " " <> getValue y
+
+                -- Id (TACVariable)
+
         (ThreeAddressCode NewLabel Nothing (Just label) Nothing) ->
             show label <> ":"
-
-        ThreeAddressCode Exit Nothing Nothing Nothing -> syscall 10
 
         ThreeAddressCode Call Nothing (Just l) (Just n) ->
             jal <> " " <> show l
@@ -58,7 +78,21 @@ mapper' registerAssignment stringsMap tac =
             jr <> " $ra"
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
-            liToReg (getValue x) (getValue y)
+            case y of
+                Constant (c, BigIntTAC) ->
+                    liToReg (getValue x) (getValue y)
+
+                Constant (c, SmallIntTAC) ->
+                    liToReg (getValue x) (getValue y)
+
+                Constant (c, FloatTAC) ->
+                    lis <> " " <> (getValue x) <> " " <> (getValue y)
+
+                -- TODO: other assignments?
+
+                -- TODO: add support for float assignments
+                _ ->
+                    move <> " " <> (getValue x) <> " " <> (getValue y)
 
         ThreeAddressCode Print Nothing (Just e) Nothing ->
             case e of
@@ -85,7 +119,7 @@ mapper' registerAssignment stringsMap tac =
                 -- print 1.5
                 -- this would use syscall 2
                 Constant (c, FloatTAC) ->
-                    red <> bold <> "print " <> c <> " # not implemented yet" <> nocolor
+                    red <> bold <> "# print " <> c <> " not implemented yet" <> nocolor
 
                 -- we assume for the moment that if we want to print a temporal we will print
                 -- an integer
@@ -93,10 +127,10 @@ mapper' registerAssignment stringsMap tac =
                     move <> " " <> show (Register "a0") <> " " <> getValue e <> "\n" <>
                     syscall 1
 
+                Id _ -> red <> bold <> "# not implemented yet" <> nocolor
+
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode Add (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode Minus (Just x) (Just y) Nothing ->
         -- ThreeAddressCode Sub (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Mult (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Div (Just x) (Just y) (Just z) ->
@@ -117,7 +151,6 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Gte (Just x) (Just y) (Just label) ->
         -- ThreeAddressCode Get (Just x) (Just y) (Just i) ->
         -- ThreeAddressCode Set (Just x) (Just i) (Just y) ->
-        -- ThreeAddressCode NewLabel Nothing (Just label) Nothin ->
         -- ThreeAddressCode New (Just x) (Just size) Nothing ->
         -- ThreeAddressCode Free Nothing (Just addr) Nothing ->
         -- ThreeAddressCode Ref (Just x) (Just y) Nothing ->
@@ -125,7 +158,6 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Call Nothing (Just l) (Just n) ->
         -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
         -- ThreeAddressCode Read Nothing (Just e) Nothing ->
-        -- ThreeAddressCode Return Nothing Nothing Nothing ->
         -- ThreeAddressCode Return Nothing (Just t) Nothing ->
 
         -- exit (success)
@@ -137,7 +169,7 @@ mapper' registerAssignment stringsMap tac =
             liToReg "a0" "1" <>
             syscall 17
 
-        _ -> red <> bold <> show tac <> " # not implemented yet" <> nocolor
+        _ ->  "# " <> red <> bold <> show tac <> " not implemented yet" <> nocolor
 
 mapper :: RegisterAssignment -> [TAC] -> [String]
 mapper regAssignment tacs = dataSegment <> textSegment
@@ -160,7 +192,7 @@ mapper regAssignment tacs = dataSegment <> textSegment
                 in Data.Map.fromList $ zip values keys
 
         textSegment :: [String]
-        textSegment = ".text\nmain:" : map (mapper' regAssignment stringsMap) tacs
+        textSegment = ".text\nmain:" : map (\t -> "# " <> (show t) <> "\n" <> (mapper' regAssignment stringsMap t)) tacs
 
 
         dataSegment :: [String]
