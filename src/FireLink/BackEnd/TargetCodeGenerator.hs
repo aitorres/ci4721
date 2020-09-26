@@ -144,7 +144,7 @@ mapper regAssignment tacs = dataSegment <> textSegment
                 in Data.Map.fromList $ zip values keys
 
         textSegment :: [String]
-        textSegment = ".text" : map (mapper' regAssignment stringsMap) tacs
+        textSegment = ".text\nmain:" : map (mapper' regAssignment stringsMap) tacs
 
 
         dataSegment :: [String]

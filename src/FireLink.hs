@@ -370,6 +370,7 @@ commandLineParser =
             <> help "Print register assignment" )
         <*> switch
             ( long "target-code"
+            <> short 'c'
             <> help "Print Target Code" )
 
 compiler :: CommandLineArgs -> IO ()
