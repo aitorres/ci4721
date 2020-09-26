@@ -14,7 +14,7 @@ spec =
                 \trust your inventory\n\
                 \   lit:\n\
                 \       traveling somewhere\n\
-                \           with orange saponite say @test@\n\
+                \           with orange soapstone say @test@\n\
                 \       you died\n\
                 \inventory closed\n\
                 \you died \
@@ -28,7 +28,7 @@ spec =
             \trust your inventory\n\
             \   1 + 1:\n\
             \       traveling somewhere\n\
-            \           with orange saponite say @test@\n\
+            \           with orange soapstone say @test@\n\
             \       you died\n\
             \inventory closed\n\
             \you died \

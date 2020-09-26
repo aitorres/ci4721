@@ -19,7 +19,7 @@ baseProgramRead :: String -> String
 baseProgramRead = baseProgram "transpose into"
 
 baseProgramPrint :: String -> String
-baseProgramPrint = baseProgram "with orange saponite say"
+baseProgramPrint = baseProgram "with orange soapstone say"
 
 spec :: Spec
 spec =

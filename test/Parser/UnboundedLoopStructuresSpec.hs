@@ -23,7 +23,7 @@ spec = describe "Unbounded looping" $ do
         runTestForValidProgram (buildProgram "\
         \ while the unlit covenant is active: \
             \ traveling somewhere \
-            \   with orange saponite say @@ \
+            \   with orange soapstone say @@ \
             \ you died \
         \ covenant left")  (\(Program (
             CodeBlock [

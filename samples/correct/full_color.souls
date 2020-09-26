@@ -33,8 +33,8 @@ requesting
   ref n of type <123>-miracle
 to the estus flask
   traveling somewhere
-    with orange saponite say @hello world@ \
-    with orange saponite say n
+    with orange soapstone say @hello world@ \
+    with orange soapstone say n
   you died
 ashen estus flask consumed
 
@@ -68,7 +68,7 @@ in your inventory
   transpose into n \
   f <<= summon fibonacci
     granting n to the knight \
-  with orange saponite say f \
+  with orange soapstone say f \
 
   trust your inventory
     lit:
@@ -87,8 +87,8 @@ in your inventory
       you died
     liar!:
       traveling somewhere
-        with orange saponite say 1 lte n \
-        with orange saponite say 1 gt n
+        with orange soapstone say 1 lte n \
+        with orange soapstone say 1 gt n
       you died
   inventory closed \
 
@@ -96,14 +96,14 @@ in your inventory
     123:
       traveling somewhere
         n <<= - n \
-        with orange saponite say 1 lt n
+        with orange soapstone say 1 lt n
       you died
     empty dungeon:
       traveling somewhere
-        with orange saponite say 1 gte n \
-        with orange saponite say 1 eq n \
-        with orange saponite say 1 neq n \
-        with orange saponite say lit
+        with orange soapstone say 1 gte n \
+        with orange soapstone say 1 eq n \
+        with orange soapstone say 1 neq n \
+        with orange soapstone say lit
       you died
   dungeon exited \
 
@@ -115,7 +115,7 @@ in your inventory
 
   repairing ii with titanite from ff
     traveling somewhere
-      with orange saponite say ii ~> prop
+      with orange soapstone say ii ~> prop
     you died
   weaponry repaired \
 
@@ -125,12 +125,12 @@ in your inventory
       e ~> y ~> e <<= lit and not lit or unlit eq lit neq undiscovered
     you died
   covenant left \
-  with orange saponite say |!| \
-  with orange saponite say |\n| \
-  with orange saponite say |\|| \
-  with orange saponite say ascii_of |a| \
+  with orange soapstone say |!| \
+  with orange soapstone say |\n| \
+  with orange soapstone say |\|| \
+  with orange soapstone say ascii_of |a| \
   c <<= @hellow @ >-< @world@ \
-  with orange saponite say d<$n$> \
+  with orange soapstone say d<$n$> \
   n <<= size d \
   ff <<= {$ $} \
   ff <<= ff union ff \

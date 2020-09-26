@@ -16,7 +16,7 @@ spec =
 
                 \upgrading i with 1 souls until level 10\n\
                 \traveling somewhere\n\
-                    \with orange saponite say i\n\
+                    \with orange soapstone say i\n\
                 \you died\n\
                 \max level reached\n\
 
@@ -34,7 +34,7 @@ spec =
 
             \upgrading i with |a| souls until level 10\n\
             \traveling somewhere\n\
-                \with orange saponite say i\n\
+                \with orange soapstone say i\n\
             \you died\n\
             \max level reached\n\
 
@@ -51,7 +51,7 @@ spec =
 
             \upgrading i with 1 souls until level |t|\n\
             \traveling somewhere\n\
-                \with orange saponite say i\n\
+                \with orange soapstone say i\n\
             \you died\n\
             \max level reached\n\
 

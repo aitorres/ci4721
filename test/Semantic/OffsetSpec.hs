@@ -14,7 +14,7 @@ testOffset = testProgram . baseProgram
                     \ with \
                     \" ++ s ++ "\
                     \ in your inventory \
-                    \ with orange saponite say @hello world@ \
+                    \ with orange soapstone say @hello world@ \
                     \ you died \
                     \ farewell ashen one"
 

@@ -6,14 +6,14 @@ with
   var i of type humanity <<= 0,
   var a of type <1000>-chest of type humanity
 in your inventory
-  with orange saponite say @Enter a number: @ \
+  with orange soapstone say @Enter a number: @ \
   transpose into n \
 
   upgrading i with 1 soul until level n
     traveling somewhere
-      with orange saponite say @Enter element @ \
-      with orange saponite say n \
-      with orange saponite say @: @ \
+      with orange soapstone say @Enter element @ \
+      with orange soapstone say n \
+      with orange soapstone say @: @ \
       transpose into a<$i$>
     you died
   max level reached \
@@ -36,12 +36,12 @@ in your inventory
     you died
   max level reached \
 
-  with orange saponite say @Printing sorted array\n@ \
+  with orange soapstone say @Printing sorted array\n@ \
 
   upgrading i with 1 soul until level n
     traveling somewhere
-      with orange saponite say a<$i$> \
-      with orange saponite say @\n@ \
+      with orange soapstone say a<$i$> \
+      with orange soapstone say @\n@ \
       transpose into a<$i$>
     you died
   max level reached

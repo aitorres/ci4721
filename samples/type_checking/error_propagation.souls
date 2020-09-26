@@ -2,9 +2,9 @@ hello ashen one
 
 traveling somewhere
     -- this should only report one error
-    with orange saponite say 1 + (1 + |a|) \
-    with orange saponite say 1 + (summon f) \
-    with orange saponite say fff
+    with orange soapstone say 1 + (1 + |a|) \
+    with orange soapstone say 1 + (summon f) \
+    with orange soapstone say fff
 you died
 
 farewell ashen one

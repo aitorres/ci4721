@@ -28,7 +28,7 @@ testVoid prog = U.testVoid (program prog)
 spec :: Spec
 spec = describe "Constants" $ do
   it "rejects constant reassignments" $ program "b <<= 1" `U.shouldErrorOn` ("b", 9, 5)
-  it "allows to use constants on expressions" $ U.shouldNotError $ program "with orange saponite say b"
+  it "allows to use constants on expressions" $ U.shouldNotError $ program "with orange soapstone say b"
   it "rejects constant array reassignments" $ program "c<$0$> <<= 1" `U.shouldErrorOn` ("c", 9, 5)
   it "allows variable reassignments" $ U.shouldNotError $ program "a <<= 3"
   it "allows variable arrays reassignments" $ U.shouldNotError $ program "d<$0$> <<= 3"

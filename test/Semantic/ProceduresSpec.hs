@@ -28,7 +28,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -50,7 +50,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -76,7 +76,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -101,7 +101,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -132,7 +132,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one" `U.shouldErrorOn` ("x", 5, 8)
         it "rejects to declare variables on the first scope of a procedure whose names are on the arg list" $
@@ -154,7 +154,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one" `U.shouldErrorOn` ("x", 8, 8)
         it "allows to declare more than 1 procedure" $ do
@@ -178,7 +178,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, errors) <- U.extractSymTable p

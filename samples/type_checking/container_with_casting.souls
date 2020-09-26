@@ -4,7 +4,7 @@ traveling somewhere
 with
     var x of type armor of type armor of type humanity <<= {${$1, 2, 3.0$}$}
 in your inventory
-    with orange saponite say x
+    with orange soapstone say x
 you died
 
 farewell ashen one

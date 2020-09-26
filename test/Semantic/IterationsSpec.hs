@@ -13,7 +13,7 @@ spec = describe "Iterations declarations" $ do
     \ upgrading i with 1 soul until level 10 \n\
     \ traveling somewhere \n\
     \ i <<= 1 + 1 \\ \n\
-    \ with orange saponite say @hello world@ \n\
+    \ with orange soapstone say @hello world@ \n\
     \ you died \n\
     \ max level reached \n\
     \ you died \n\
@@ -25,7 +25,7 @@ spec = describe "Iterations declarations" $ do
     \ with const i of type humanity <<= 1 in your inventory \n\
     \ upgrading i with 1 soul until level 10 \n\
     \ traveling somewhere \n\
-    \ with orange saponite say @hello world@ \n\
+    \ with orange soapstone say @hello world@ \n\
     \ you died \n\
     \ max level reached \n\
     \ you died \n\

@@ -29,7 +29,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -51,7 +51,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -76,7 +76,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -100,7 +100,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable p
@@ -129,7 +129,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one" `U.shouldErrorOn` ("x", 5, 8)
         it "rejects to declare variables on the first scope of a function whose names are on the arg list" $
@@ -151,7 +151,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one" `U.shouldErrorOn` ("x", 8, 8)
         it "rejects to declare variables on the second (2<=) scope of a function whose names are on the arg list" $
@@ -180,7 +180,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one" `U.shouldErrorOn` ("x", 10, 12)
         it "allows to declare more than 1 function" $ do
@@ -206,7 +206,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say @hello world@ \
+            \ with orange soapstone say @hello world@ \
             \ you died \
             \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, errors) <- U.extractSymTable p
@@ -236,7 +236,7 @@ spec = do
 
 
             \ traveling somewhere \
-            \ with orange saponite say summon fun \
+            \ with orange soapstone say summon fun \
             \ you died \
             \ farewell ashen one"
         it "allows to call declared functions with parameters" $
@@ -253,7 +253,7 @@ spec = do
 
 
             \ traveling somewhere\n\
-            \ with orange saponite say summon fun\n\
+            \ with orange soapstone say summon fun\n\
             \ you died \
             \ farewell ashen one"
         it "rejects to call non-declared functions" $
@@ -270,9 +270,9 @@ spec = do
 
 
             \ traveling somewhere\n\
-            \   with orange saponite say summon fun2\n\
+            \   with orange soapstone say summon fun2\n\
             \ you died \
-            \ farewell ashen one" `U.shouldErrorOn` ("fun2", 9, 36)
+            \ farewell ashen one" `U.shouldErrorOn` ("fun2", 9, 37)
         it "allows recursion" $
             U.shouldNotError "hello ashen one\n\
 
@@ -287,7 +287,7 @@ spec = do
 
 
             \ traveling somewhere\n\
-            \   with orange saponite say summon fun\n\
+            \   with orange soapstone say summon fun\n\
             \ you died \
             \ farewell ashen one"
         it "allows corecursion" $ do
@@ -313,7 +313,7 @@ spec = do
 
 
             \ traveling somewhere\n\
-            \   with orange saponite say summon fun\n\
+            \   with orange soapstone say summon fun\n\
             \ you died \
             \ farewell ashen one"
             errors <- U.extractErrors p

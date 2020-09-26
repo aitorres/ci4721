@@ -33,7 +33,7 @@ spec = describe "Instructions" $ do
         \   var patata of type humanity \
         \ in your inventory \
 
-        \   with orange saponite say @hello world@ \\ \
+        \   with orange soapstone say @hello world@ \\ \
         \   transpose into patata \
         \ you died \
 

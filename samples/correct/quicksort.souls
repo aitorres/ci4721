@@ -30,7 +30,7 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say @Enter value: @ \
+        with orange soapstone say @Enter value: @ \
         transpose into arr<$i$>
       you died
     max level reached \
@@ -49,7 +49,7 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say @Enter value: @ \
+        with orange soapstone say @Enter value: @ \
         transpose into arr<$i$>
       you died
     max level reached \
@@ -68,7 +68,7 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say @Enter value: @ \
+        with orange soapstone say @Enter value: @ \
         transpose into arr<$i$>
       you died
     max level reached \
@@ -87,8 +87,8 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say arr<$i$> \
-        with orange saponite say @\n@
+        with orange soapstone say arr<$i$> \
+        with orange soapstone say @\n@
       you died
     max level reached \
     go back
@@ -106,8 +106,8 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say arr<$i$> \
-        with orange saponite say @\n@
+        with orange soapstone say arr<$i$> \
+        with orange soapstone say @\n@
       you died
     max level reached \
     go back
@@ -125,8 +125,8 @@ to the estus flask
   in your inventory
     upgrading i with 1 soul until level n
       traveling somewhere
-        with orange saponite say arr<$i$> \
-        with orange saponite say @\n@
+        with orange soapstone say arr<$i$> \
+        with orange soapstone say @\n@
       you died
     max level reached \
     go back
@@ -357,19 +357,19 @@ with
   var stop of type bonfire <<= unlit
 in your inventory
 
-  with orange saponite say @Quicksort <<in-place>>\n@ \
+  with orange soapstone say @Quicksort <<in-place>>\n@ \
 
   while the not stop covenant is active:
     traveling somewhere
       with var option of type sign
     in your inventory
-      with orange saponite say @Want to sort (i)ntegers, (c)haracters, (f)loats or (q)uit? (i/c/f/q): @ \
+      with orange soapstone say @Want to sort (i)ntegers, (c)haracters, (f)loats or (q)uit? (i/c/f/q): @ \
       transpose into option \
 
       trust your inventory
         option neq |i| and option neq |c| and option neq |f|:
           traveling somewhere
-            with orange saponite say @Exiting...\n@ \
+            with orange soapstone say @Exiting...\n@ \
             stop <<= lit
           you died
         liar!:
@@ -377,7 +377,7 @@ in your inventory
           with
             var n of type humanity
           in your inventory
-            with orange saponite say @Enter the size (between 1 and 100): @ \
+            with orange soapstone say @Enter the size (between 1 and 100): @ \
             transpose into n \
 
             trust your inventory
@@ -392,7 +392,7 @@ in your inventory
                       in your inventory
                         cast readarri offering n, arr to the estus flask \
                         cast quicksorti offering n, arr, 0, n - 1 to the estus flask \
-                        with orange saponite say @Printing result: \n@ \
+                        with orange soapstone say @Printing result: \n@ \
                         cast printarri offering n, arr to the estus flask
                       you died
                     option eq |c|:
@@ -402,7 +402,7 @@ in your inventory
                       in your inventory
                         cast readarrc offering n, arr to the estus flask \
                         cast quicksortc offering n, arr, 0, n - 1 to the estus flask \
-                        with orange saponite say @Printing result: \n@ \
+                        with orange soapstone say @Printing result: \n@ \
                         cast printarrc offering n, arr to the estus flask
                       you died
                     option eq |f|:
@@ -412,7 +412,7 @@ in your inventory
                       in your inventory
                         cast readarrf offering n, arr to the estus flask \
                         cast quicksortf offering n, arr, 0, n - 1 to the estus flask \
-                        with orange saponite say @Printing result: \n@ \
+                        with orange soapstone say @Printing result: \n@ \
                         cast printarrf offering n, arr to the estus flask
                       you died
                   inventory closed
@@ -420,7 +420,7 @@ in your inventory
                 you died
               liar!:
                 traveling somewhere
-                  with orange saponite say @Invalid amount, aborting...\n@ \
+                  with orange soapstone say @Invalid amount, aborting...\n@ \
                   stop <<= lit
                 you died
             inventory closed

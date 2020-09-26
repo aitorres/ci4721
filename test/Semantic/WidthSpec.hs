@@ -25,7 +25,7 @@ testWidth programFragment expectedWidth = do
                     \ help received \
 
                     \ traveling somewhere \
-                    \ with orange saponite say @hello world@ \
+                    \ with orange soapstone say @hello world@ \
                     \ you died \
                     \ farewell ashen one"
 
@@ -98,7 +98,7 @@ spec = do
                     \ help received \
 
                     \ traveling somewhere \
-                    \ with orange saponite say @hello world@ \
+                    \ with orange soapstone say @hello world@ \
                     \ you died \
                     \ farewell ashen one"
             (_, ST.SymTable {ST.stDict=dict}, _) <- U.extractSymTable program

@@ -57,7 +57,7 @@ to the estus flask
     var i of type humanity <<= 0
   in your inventory
 
-    with orange saponite say n \
+    with orange soapstone say n \
 
     upgrading i with 1 soul until level g~>e
       traveling somewhere

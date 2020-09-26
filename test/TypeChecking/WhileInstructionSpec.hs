@@ -13,7 +13,7 @@ spec =
                 \traveling somewhere \n\
                 \while the lit covenant is active:\n\
                 \       traveling somewhere\n\
-                \           with orange saponite say @test@\n\
+                \           with orange soapstone say @test@\n\
                 \       you died\n\
                 \covenant left\n\
                 \you died \
@@ -26,7 +26,7 @@ spec =
             \traveling somewhere \n\
             \while the 1 covenant is active:\n\
             \       traveling somewhere\n\
-            \           with orange saponite say @test@\n\
+            \           with orange soapstone say @test@\n\
             \       you died\n\
             \covenant left\n\
             \you died \

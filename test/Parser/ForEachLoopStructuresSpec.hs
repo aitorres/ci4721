@@ -20,14 +20,14 @@ spec = describe "Loops over structures" $ do
         runTestForInvalidProgram $ buildProgram "\
         \ repairing 1 with titanite from b \
         \ traveling somewhere \
-        \   with orange saponite say @@ \
+        \   with orange soapstone say @@ \
         \ you died \
         \ weaponry repaired"
     it "accepts on well-formed loops" $
         runTestForValidProgram (buildProgram "\
         \ repairing a with titanite from b \
         \ traveling somewhere \
-        \   with orange saponite say @@ \
+        \   with orange soapstone say @@ \
         \ you died \
         \ weaponry repaired") (\(Program (
             CodeBlock [

@@ -236,7 +236,7 @@ spec = do
             \ with \
             \   var x of type humanity \
             \ in your inventory \
-            \ with orange saponite say x \
+            \ with orange soapstone say x \
             \ you died \
 
             \ farewell ashen one"
@@ -251,7 +251,7 @@ spec = do
 
             \while the lit covenant is active:\n\
             \traveling somewhere\n\
-            \   with orange saponite say x\n\
+            \   with orange soapstone say x\n\
             \you died\n\
             \covenant left\n\
             \ you died\n\
@@ -347,10 +347,10 @@ spec = do
             \ with\n\
             \   var x of type humanity\n\
             \ in your inventory\n\
-            \   with orange saponite say y\n\
+            \   with orange soapstone say y\n\
             \ you died \
 
-            \ farewell ashen one" `U.shouldErrorOn` ("y", 6, 29)
+            \ farewell ashen one" `U.shouldErrorOn` ("y", 6, 30)
 
     describe "Correctly handles initialization (declaration + assignments)" $ do
         it "Prepends assignment instruction on initialization" $ do
@@ -361,7 +361,7 @@ spec = do
             \ with\n\
             \   var x of type small humanity <<= 1\n\
             \ in your inventory\n\
-            \   with orange saponite say @oh yes@\n\
+            \   with orange soapstone say @oh yes@\n\
             \ you died\n\
 
             \ farewell ashen one"
@@ -386,7 +386,7 @@ spec = do
             \   var x of type small humanity <<= 1,\n\
             \   var y of type small humanity <<= 22\n\
             \ in your inventory\n\
-            \   with orange saponite say @oh yes@\n\
+            \   with orange soapstone say @oh yes@\n\
             \ you died\n\
 
             \ farewell ashen one"

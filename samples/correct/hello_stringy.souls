@@ -8,7 +8,7 @@ hello ashen one
   with
     const h of type stringy <<= @Hello, world!@
   in your inventory
-    with orange saponite say h
+    with orange soapstone say h
   you died
 
 farewell ashen one

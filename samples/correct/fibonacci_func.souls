@@ -30,7 +30,7 @@ in your inventory
   transpose into n \
   f <<= summon fibonacci
     granting n to the knight \
-  with orange saponite say f
+  with orange soapstone say f
 you died
 
 farewell ashen one

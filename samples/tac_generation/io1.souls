@@ -11,10 +11,10 @@ in your inventory
     transpose into b \
     transpose into c \
     d <<= lit \
-    with orange saponite say a \
-    with orange saponite say c \
-    with orange saponite say b \
-    with orange saponite say d
+    with orange soapstone say a \
+    with orange soapstone say c \
+    with orange soapstone say b \
+    with orange soapstone say d
 you died
 
 farewell ashen one

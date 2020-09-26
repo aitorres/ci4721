@@ -11,21 +11,21 @@ with
     var g of type link { y of type humanity }
 in your inventory
     -- Valid
-    with orange saponite say a \
+    with orange soapstone say a \
     transpose into a \
-    with orange saponite say d \
+    with orange soapstone say d \
     transpose into d \
-    with orange saponite say e \
+    with orange soapstone say e \
     transpose into e \
-    with orange saponite say f \
+    with orange soapstone say f \
     transpose into f \
 
     -- Invalid
-    with orange saponite say b \
+    with orange soapstone say b \
     transpose into b \
-    with orange saponite say c \
+    with orange soapstone say c \
     transpose into c \
-    with orange saponite say g \
+    with orange soapstone say g \
     transpose into g
 you died
 

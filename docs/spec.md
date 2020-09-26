@@ -665,7 +665,7 @@ La llamada a la función NO evalúa a ninguna expresión.
 Para imprimir una expresión a la salida estándar, se puede usar el siguiente procedimiento:
 
 ```firelink
-with orange saponite say <expresión>
+with orange soapstone say <expresión>
 ```
 
 Únicamente se pueden imprimir expresiones de los siguientes tipos:
@@ -751,8 +751,8 @@ Por ejemplo:
 ```firelink
 upgrading i with 1 soul until level 20
   traveling somewhere
-    with orange saponite say i \
-    with orange saponite say |\n|
+    with orange soapstone say i \
+    with orange soapstone say |\n|
   you died
 max level reached
 ```
@@ -786,8 +786,8 @@ Por ejemplo:
 ```firelink
 repairing i with titanite from biglist
   traveling somewhere
-    with orange saponite say i \
-    with orange saponite say |\n|
+    with orange soapstone say i \
+    with orange soapstone say |\n|
   you died
 weaponry repaired
 ```

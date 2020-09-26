@@ -13,7 +13,7 @@ baseProgram t1 t2 = "hello ashen one\n\
 \in your inventory\n\
 \repairing i with titanite from is\n\
 \traveling somewhere\n\
-    \with orange saponite say i\n\
+    \with orange soapstone say i\n\
 \you died\n\
 \weaponry repaired\n\
 \you died\n\

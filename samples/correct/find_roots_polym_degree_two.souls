@@ -78,7 +78,7 @@ hello ashen one
         you died
       (b*b - 4*a*c) lt 0:
         traveling somewhere
-          -- with orange saponite say @ERROR! This is a complex polynomial\n@ \
+          -- with orange soapstone say @ERROR! This is a complex polynomial\n@ \
           found <<= unlit
         you died
     inventory closed \
@@ -86,11 +86,11 @@ hello ashen one
     trust your inventory
       found:
         traveling somewhere
-          -- with orange saponite say @x1: @ \
-          with orange saponite say x1 \
-          -- with orange saponite say @\n@ >-< @x2: @ \
-          with orange saponite say x2 -- \
-          --with orange saponite say @\n@
+          -- with orange soapstone say @x1: @ \
+          with orange soapstone say x1 \
+          -- with orange soapstone say @\n@ >-< @x2: @ \
+          with orange soapstone say x2 -- \
+          --with orange soapstone say @\n@
         you died
     inventory closed
   you died

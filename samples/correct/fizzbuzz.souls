@@ -12,21 +12,21 @@ hello ashen one
         trust your inventory
         i % 15 eq 0:
           traveling somewhere
-            -- with orange saponite say @FizzBuzz@ \
-            -- with orange saponite say @\n@
-               with orange saponite say 3 -- fizzbuzz
+            -- with orange soapstone say @FizzBuzz@ \
+            -- with orange soapstone say @\n@
+               with orange soapstone say 3 -- fizzbuzz
           you died
         i % 3 eq 0:
           traveling somewhere
-            -- with orange saponite say @Fizz@ \
-            --with orange saponite say @\n@
-              with orange saponite say 1 -- fizz
+            -- with orange soapstone say @Fizz@ \
+            --with orange soapstone say @\n@
+              with orange soapstone say 1 -- fizz
           you died
         i % 5 eq 0:
           traveling somewhere
-            --with orange saponite say @Buzz@ \
-            --with orange saponite say @\n@
-             with orange saponite say 2 -- buzz
+            --with orange soapstone say @Buzz@ \
+            --with orange soapstone say @\n@
+             with orange soapstone say 2 -- buzz
           you died
         inventory closed
       you died

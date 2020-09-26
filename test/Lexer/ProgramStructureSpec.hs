@@ -48,8 +48,8 @@ spec = describe "Lexer" $ do
     let atok = getAbstractToken $ head toks
     atok `shouldBe` TkSeq
 
-  it "accepts `with orange saponite say` as a valid token" $ do
-    let x = "with orange saponite say"
+  it "accepts `with orange soapstone say` as a valid token" $ do
+    let x = "with orange soapstone say"
     let ([], toks) = scanTokens x
     let atok = getAbstractToken $ head toks
     atok `shouldBe` TkPrint

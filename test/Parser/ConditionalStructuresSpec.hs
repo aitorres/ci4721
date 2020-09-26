@@ -26,13 +26,13 @@ spec = do
             runTestForInvalidProgram $ buildProgram "\
             \ liar!: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died"
         it "accepts a selection block with only one if statment" $
             runTestForValidProgram (buildProgram "\
             \ lit: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \ you died") (\(Program (CodeBlock [InstIf [
                 GuardedCase
                     Expr{expAst=TrueLit}
@@ -43,11 +43,11 @@ spec = do
             runTestForValidProgram (buildProgram "\
             \ lit: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died \
             \ unlit: \
             \   traveling somewhere \
-            \       with orange saponite say @goodbye@ \
+            \       with orange soapstone say @goodbye@ \
             \   you died") (\(Program (CodeBlock [InstIf [
                 GuardedCase
                     Expr{expAst=TrueLit}
@@ -59,11 +59,11 @@ spec = do
             runTestForValidProgram (buildProgram "\
             \ lit: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died \
             \ liar!: \
             \   traveling somewhere \
-            \       with orange saponite say @goodbye@ \
+            \       with orange soapstone say @goodbye@ \
             \   you died") (\(Program (CodeBlock [InstIf [
                 GuardedCase
                     Expr{expAst=TrueLit}
@@ -76,15 +76,15 @@ spec = do
             runTestForInvalidProgram $ buildProgram "\
             \ lit: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died \
             \ liar!: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died \
             \ liar!: \
             \   traveling somewhere \
-            \       with orange saponite say @hello world@ \
+            \       with orange soapstone say @hello world@ \
             \   you died"
     describe "Switch statements" $ do
         let buildProgram c = "\
@@ -104,13 +104,13 @@ spec = do
             runTestForInvalidProgram $ buildProgram "\
             \ empty dungeon: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died"
         it "accepts switch statament with only one case" $
             runTestForValidProgram (buildProgram "\
             \ 1: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died") (\(Program (CodeBlock [InstSwitch Expr{expAst=(IdExpr (Id Token {cleanedString="a"} _))} [
                     Case Expr{expAst=(IntLit 1)} (CodeBlock [InstPrint Expr{expAst=(StringLit "hello")}] _)
                 ], InstReturn] _)) -> True)
@@ -119,25 +119,25 @@ spec = do
             runTestForInvalidProgram $ buildProgram "\
             \ 1: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died \
             \ empty dungeon: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died \
             \ empty dungeon: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died "
         it "accepts swith statement with several non-default cases" $
             runTestForValidProgram (buildProgram "\
             \ 1: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died \
             \ 2: \
             \   traveling somewhere \
-            \       with orange saponite say @bye@ \
+            \       with orange soapstone say @bye@ \
             \   you died") (\(Program (CodeBlock [InstSwitch Expr{expAst=(IdExpr (Id Token {cleanedString="a"} _))} [
                     Case Expr{expAst=(IntLit 1)} (CodeBlock [InstPrint Expr{expAst=(StringLit "hello")}] _),
                     Case Expr{expAst=(IntLit 2)} (CodeBlock [InstPrint Expr{expAst=(StringLit "bye")}] _)
@@ -147,15 +147,15 @@ spec = do
             runTestForValidProgram (buildProgram "\
             \ 1: \
             \   traveling somewhere \
-            \       with orange saponite say @hello@ \
+            \       with orange soapstone say @hello@ \
             \   you died \
             \ 2: \
             \   traveling somewhere \
-            \       with orange saponite say @bye@ \
+            \       with orange soapstone say @bye@ \
             \   you died \
             \ empty dungeon: \
             \   traveling somewhere \
-            \       with orange saponite say @empty@ \
+            \       with orange soapstone say @empty@ \
             \   you died") (\(Program (CodeBlock [InstSwitch Expr{expAst=IdExpr (Id Token {cleanedString="a"} _)} [
                     Case Expr{expAst=(IntLit 1)} (CodeBlock [InstPrint Expr{expAst=StringLit "hello"}] _),
                     Case Expr{expAst=(IntLit 2)} (CodeBlock [InstPrint Expr{expAst=StringLit "bye"}] _),

@@ -29,7 +29,7 @@ tokens :-
     with                                  { makeToken TkWith }
     in\ your\ inventory                   { makeToken TkDeclarationEnd }
     transpose\ into                       { makeToken TkRead }
-    with\ orange\ saponite\ say           { makeToken TkPrint }
+    with\ orange\ soapstone\ say           { makeToken TkPrint }
 
     -- Functions and procedures
     spell                                 { makeToken TkSpell }

@@ -4,11 +4,11 @@ hello ashen one
     trust your inventory
       (<$ $> eq <$ <$ $> $>):
         traveling somewhere
-          with orange saponite say @They're equal!\n@
+          with orange soapstone say @They're equal!\n@
         you died
       liar!:
         traveling somewhere
-          with orange saponite say @They're not equal!\n@
+          with orange soapstone say @They're not equal!\n@
         you died
     inventory closed
   you died

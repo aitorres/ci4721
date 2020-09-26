@@ -144,63 +144,63 @@ with
   var stop of type bonfire
 in your inventory
 
-  with orange saponite say @Welcome to the stats calculator!\n@ \
+  with orange soapstone say @Welcome to the stats calculator!\n@ \
 
   while the not stop covenant is active:
     traveling somewhere
     with
       var t of type humanity
     in your inventory
-      with orange saponite say @Iteration started\n@ \
-      with orange saponite say @Enter the amount of values to process: @ \
+      with orange soapstone say @Iteration started\n@ \
+      with orange soapstone say @Enter the amount of values to process: @ \
 
       transpose into t \
 
       trust your inventory
         t lte 0:
           traveling somewhere
-            with orange saponite say @At least 1 value is needed. Stopping the program.\n@ \
+            with orange soapstone say @At least 1 value is needed. Stopping the program.\n@ \
             stop <<= lit
           you died
         liar!:
           traveling somewhere
-            with orange saponite say @We will now process each value\n@ \
+            with orange soapstone say @We will now process each value\n@ \
 
             -- Each value is read
             i <<= 0 \
             upgrading i with 1 soul until level t
               traveling somewhere
-                with orange saponite say @Enter value: @ \
+                with orange soapstone say @Enter value: @ \
                 transpose into arr<$i$>
               you died
             max level reached \
 
             -- Printing stuff
-            with orange saponite say @Number of values: @ \
-            with orange saponite say t \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Number of values: @ \
+            with orange soapstone say t \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Min value: @ \
-            with orange saponite say summon min granting t, arr to the knight \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Min value: @ \
+            with orange soapstone say summon min granting t, arr to the knight \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Max value: @ \
-            with orange saponite say summon max granting t, arr to the knight \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Max value: @ \
+            with orange soapstone say summon max granting t, arr to the knight \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Average: @ \
-            with orange saponite say summon avg granting t, arr to the knight \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Average: @ \
+            with orange soapstone say summon avg granting t, arr to the knight \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Variance: @ \
-            with orange saponite say summon vari granting t, arr to the knight \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Variance: @ \
+            with orange soapstone say summon vari granting t, arr to the knight \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Standard Deviation: @ \
-            with orange saponite say summon std granting t, arr to the knight \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Standard Deviation: @ \
+            with orange soapstone say summon std granting t, arr to the knight \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Wanna go again? (lit/unlit): @ \
+            with orange soapstone say @Wanna go again? (lit/unlit): @ \
             transpose into stop
           you died
       inventory closed

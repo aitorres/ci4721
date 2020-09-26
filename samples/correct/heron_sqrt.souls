@@ -29,21 +29,21 @@ traveling somewhere
 with
   var stop of type bonfire <<= unlit
 in your inventory
-  with orange saponite say @Square Root by Heron's Method\n@ \
+  with orange soapstone say @Square Root by Heron's Method\n@ \
 
   while the not stop covenant is active:
     traveling somewhere
     with
       var n of type hollow
     in your inventory
-      with orange saponite say @Enter the number: @ \
+      with orange soapstone say @Enter the number: @ \
       transpose into n \
 
       trust your inventory
         n lt 0:
           traveling somewhere
             stop <<= lit \
-            with orange saponite say @Only non-negative numbers are allowed!\n@
+            with orange soapstone say @Only non-negative numbers are allowed!\n@
           you died
         liar!:
           traveling somewhere
@@ -52,11 +52,11 @@ in your inventory
           in your inventory
             s <<= summon sqrt granting n, 1000000 to the knight \
 
-            with orange saponite say @Approximate square root: @ \
-            with orange saponite say s \
-            with orange saponite say @\n@ \
+            with orange soapstone say @Approximate square root: @ \
+            with orange soapstone say s \
+            with orange soapstone say @\n@ \
 
-            with orange saponite say @Wanna go again? (lit/unlit): @ \
+            with orange soapstone say @Wanna go again? (lit/unlit): @ \
             transpose into stop
           you died
       inventory closed

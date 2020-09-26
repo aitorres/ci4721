@@ -66,7 +66,7 @@ data AbstractToken = TkId | TkConst | TkVar | TkOfType | TkAsig
     | TkSpellParsEnd
     | TkReturnWith
     -- Basic I/O
-    | TkPrint -- with orange saponite say
+    | TkPrint -- with orange soapstone say
     | TkRead -- transpose into
     -- Basic selection
     | TkIf -- trust your inventory

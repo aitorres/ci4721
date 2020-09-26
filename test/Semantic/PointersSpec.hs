@@ -22,7 +22,7 @@ sampleProgram instr = "hello ashen one\n\
 \   var y of type humanity\n\
 \in your inventory\n\
 \   " ++ instr ++ "\n\
-\   with orange saponite say @hello world@\n\
+\   with orange soapstone say @hello world@\n\
 \you died\n\
 
 \farewell ashen one\n"

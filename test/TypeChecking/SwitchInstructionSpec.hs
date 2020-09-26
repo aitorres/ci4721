@@ -15,11 +15,11 @@ spec =
                 \enter dungeon with n:\n\
                 \   8:\n\
                 \       traveling somewhere\n\
-                \           with orange saponite say @test@\n\
+                \           with orange soapstone say @test@\n\
                 \       you died\n\
                 \   5:\n\
                 \       traveling somewhere\n\
-                \           with orange saponite say @test@\n\
+                \           with orange soapstone say @test@\n\
                 \       you died\n\
                 \dungeon exited\n\
                 \you died \
@@ -35,11 +35,11 @@ spec =
             \enter dungeon with n:\n\
             \   8:\n\
             \       traveling somewhere\n\
-            \           with orange saponite say @test@\n\
+            \           with orange soapstone say @test@\n\
             \       you died\n\
             \   |a|:\n\
             \       traveling somewhere\n\
-            \           with orange saponite say @test@\n\
+            \           with orange soapstone say @test@\n\
             \       you died\n\
             \dungeon exited\n\
             \you died \
