@@ -15,12 +15,13 @@ import TACType
 import qualified Data.Map
 import qualified Data.Set
 
-tab, add, addi, sub, subs, li, lis, jal, jr, la, move, zero :: String
+tab, add, addi, sub, subs, goto, li, lis, jal, jr, la, move, zero :: String
 tab = replicate 4 ' '
 add = tab <> "add"
 addi = tab <> "addi"
 sub = tab <> "sub"
 subs = tab <> "sub.s"
+goto = tab <> "j"
 li = tab <> "li"
 lis = tab <> "li.s"
 jal = tab <> "jal"
@@ -139,8 +140,6 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Not (Just x) (Just y) _ ->
         -- ThreeAddressCode And (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Or (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode GoTo Nothing Nothing (Just label) ->
-        -- ThreeAddressCode GoTo Nothing Nothing Nothing ->
         -- ThreeAddressCode If Nothing (Just b) (Just label) ->
         -- ThreeAddressCode If Nothing (Just b) Nothing ->
         -- ThreeAddressCode Eq (Just x) (Just y) (Just label) ->
@@ -159,6 +158,9 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
         -- ThreeAddressCode Read Nothing (Just e) Nothing ->
         -- ThreeAddressCode Return Nothing (Just t) Nothing ->
+
+        ThreeAddressCode GoTo Nothing Nothing (Just label) ->
+            goto <> " " <> show label
 
         -- exit (success)
         ThreeAddressCode Exit _ _ _ ->
