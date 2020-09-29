@@ -168,15 +168,15 @@ mapper' registerAssignment stringsMap tac =
             case simpleTypeFromDictEntry x of
                 BigIntTAC ->
                     syscall 5 <> "\n" <>
-                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+                    move <> " " <> getValue e <> " " <> "$v0"
 
                 SmallIntTAC ->
                     syscall 5 <> "\n" <>
-                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+                    move <> " " <> getValue e <> " " <> "$v0"
 
                 CharTAC ->
                     syscall 5 <> "\n" <>
-                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+                    move <> " " <> getValue e <> " " <> "$v0"
 
                 _ -> red <> bold <> "# not implemented yet" <> nocolor
 
@@ -247,8 +247,7 @@ mapper regAssignment tacs = dataSegment <> textSegment
                 in Data.Map.fromList $ zip values keys
 
         textSegment :: [String]
-        textSegment = ".text\nmain:" : map (\t -> "# " <> (show t) <> "\n" <> (mapper' regAssignment stringsMap t)) tacs
-
+        textSegment = ".text\nmain:" : map (\t -> "# " <> (show t) <> "\n" <> (mapper' regAssignment stringsMap t) <> "\n") tacs
 
         dataSegment :: [String]
         dataSegment = [".data"] <>
