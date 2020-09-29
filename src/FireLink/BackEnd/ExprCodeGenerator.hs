@@ -215,11 +215,20 @@ genParams params = do
 
 genOp2Code :: TAC.Operation -> OperandType -> OperandType -> CodeGenMonad OperandType
 genOp2Code operation lId rId = do
+    -- ?INFO(Andres): Solves issue of `n := 1 + 2`
+    midId <- TAC.Id <$> newtemp
+    tell [TAC.ThreeAddressCode
+            { TAC.tacOperand = TAC.Assign
+            , TAC.tacLvalue = Just midId
+            , TAC.tacRvalue1 = Just lId
+            , TAC.tacRvalue2 = Nothing
+            }]
+
     lvalue <- TAC.Id <$> newtemp
     tell [TAC.ThreeAddressCode
             { TAC.tacOperand = operation
             , TAC.tacLvalue = Just lvalue
-            , TAC.tacRvalue1 = Just lId
+            , TAC.tacRvalue1 = Just midId
             , TAC.tacRvalue2 = Just rId
             }]
     return lvalue
