@@ -12,6 +12,7 @@ import FireLink.BackEnd.RegisterAllocationProcess (Register (..),
 import FireLink.Utils                             (bold, nocolor, red)
 import TACType
 
+import qualified FireLink.FrontEnd.SymTable as ST
 import qualified Data.Map
 import qualified Data.Set
 
@@ -33,6 +34,20 @@ zero = "$zero"
 syscall :: Int -> String
 syscall code =
     li <> " " <> show (Register "v0") <> " " <> show code <> "\n" <> tab <> "syscall"
+
+simpleTypeFromDictEntry :: ST.DictionaryEntry -> SimpleType
+simpleTypeFromDictEntry dE =
+    let typeExtra = ST.extractTypeFromExtra dE
+    in  case typeExtra of
+        ST.Simple s ->
+            if s == ST.smallHumanity then SmallIntTAC
+            else if s == ST.humanity then BigIntTAC
+            else if s == ST.hollow then FloatTAC
+            else if s == ST.sign then CharTAC
+            else if s == ST.bonfire then TrileanTAC
+            else if s == ST.void then BigIntTAC -- TODO: is this right? do we even have pointers?
+            else error "I'm sorry, this type is not supported :-("
+        _ -> error "perro"
 
 mapper' :: RegisterAssignment -> Data.Map.Map String String -> TAC -> String
 mapper' registerAssignment stringsMap tac =
