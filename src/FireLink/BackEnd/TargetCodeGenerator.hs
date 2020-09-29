@@ -104,6 +104,10 @@ mapper' registerAssignment stringsMap tac =
                 Constant (c, FloatTAC) ->
                     lis <> " " <> (getValue x) <> " " <> (getValue y)
 
+                -- assuming it's int
+                Constant (c, CharTAC) ->
+                    liToReg (getValue x) (getValue y)
+
                 -- TODO: other assignments?
 
                 -- TODO: add support for float assignments
@@ -120,16 +124,16 @@ mapper' registerAssignment stringsMap tac =
 
                 -- print 'c'
                 Constant (c, CharTAC) ->
-                    liToReg "a0" c <>
+                    liToReg "$a0" c <>
                     syscall 11
 
                 -- print 111
                 Constant (c, BigIntTAC) ->
-                    liToReg "a0" c <>
+                    liToReg "$a0" c <>
                     syscall 1
 
                 Constant (c, SmallIntTAC) ->
-                    liToReg "a0" c <>
+                    liToReg "$a0" c <>
                     syscall 1
 
                 -- print 1.5
@@ -143,7 +147,42 @@ mapper' registerAssignment stringsMap tac =
                     move <> " " <> show (Register "a0") <> " " <> getValue e <> "\n" <>
                     syscall 1
 
-                Id _ -> red <> bold <> "# not implemented yet" <> nocolor
+                -- this whole thing is still e
+                Id (TACVariable x _) ->
+                    case simpleTypeFromDictEntry x of
+                        BigIntTAC ->
+                            move <> " $a0 " <> (getValue e) <> "\n" <>
+                            syscall 1
+
+                        SmallIntTAC ->
+                            move <> " $a0 " <> (getValue e) <> "\n" <>
+                            syscall 1
+
+                        CharTAC ->
+                            move <> " $a0 " <> (getValue e) <> "\n" <>
+                            syscall 11
+
+                        _ -> red <> bold <> "# not implemented yet" <> nocolor
+
+        ThreeAddressCode Read Nothing (Just e@(Id (TACVariable x _))) Nothing ->
+            case simpleTypeFromDictEntry x of
+                BigIntTAC ->
+                    syscall 5 <> "\n" <>
+                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+
+                SmallIntTAC ->
+                    syscall 5 <> "\n" <>
+                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+
+                CharTAC ->
+                    syscall 5 <> "\n" <>
+                    move <> " " <> getValue e <> " " <> "$v0" <> "\n"
+
+                _ -> red <> bold <> "# not implemented yet" <> nocolor
+
+        -- TODO: check this thing
+        ThreeAddressCode (Cast _ _) a@(Just x) b@(Just y) _ ->
+            mapper' registerAssignment stringsMap (ThreeAddressCode Assign a b Nothing)
 
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
@@ -151,7 +190,7 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Mult (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Div (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Mod (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode (Cast _ toType) (Just x) (Just y) _ ->
+
         -- ThreeAddressCode Not (Just x) (Just y) _ ->
         -- ThreeAddressCode And (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Or (Just x) (Just y) (Just z) ->
@@ -171,7 +210,6 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode Param Nothing (Just p) Nothing ->
         -- ThreeAddressCode Call Nothing (Just l) (Just n) ->
         -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
-        -- ThreeAddressCode Read Nothing (Just e) Nothing ->
         -- ThreeAddressCode Return Nothing (Just t) Nothing ->
 
         ThreeAddressCode GoTo Nothing Nothing (Just label) ->
@@ -183,7 +221,7 @@ mapper' registerAssignment stringsMap tac =
 
         -- exit (failure, exit code = 1)
         ThreeAddressCode Abort _ _ _ ->
-            liToReg "a0" "1" <>
+            liToReg "$a0" "1" <>
             syscall 17
 
         _ ->  "# " <> red <> bold <> show tac <> " not implemented yet" <> nocolor
