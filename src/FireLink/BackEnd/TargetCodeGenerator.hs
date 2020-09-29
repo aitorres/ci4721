@@ -16,10 +16,9 @@ import qualified FireLink.FrontEnd.SymTable as ST
 import qualified Data.Map
 import qualified Data.Set
 
-tab, add, addi, sub, subs, goto, li, lis, jal, jr, la, move, zero :: String
+tab, add, sub, subs, goto, li, lis, jal, jr, la, move, zero :: String
 tab = replicate 4 ' '
 add = tab <> "add"
-addi = tab <> "addi"
 sub = tab <> "sub"
 subs = tab <> "sub.s"
 goto = tab <> "j"
@@ -63,8 +62,13 @@ mapper' registerAssignment stringsMap tac =
 
         in
     case tac of
+        -- ?INFO: Works for int, not float
         ThreeAddressCode Add (Just x) (Just y) (Just z) ->
             add <> " " <> getValue x  <> " " <> getValue y <> " " <> getValue z
+
+        -- ?INFO: Works for int, not float
+        ThreeAddressCode Sub (Just x) (Just y) (Just z) ->
+            sub <> " " <> getValue x  <> " " <> getValue y <> " " <> getValue z
 
         ThreeAddressCode Minus (Just x) (Just y) Nothing ->
             case y of
@@ -186,7 +190,6 @@ mapper' registerAssignment stringsMap tac =
 
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode Sub (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Mult (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Div (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Mod (Just x) (Just y) (Just z) ->
