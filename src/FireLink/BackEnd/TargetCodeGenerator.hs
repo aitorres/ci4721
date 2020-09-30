@@ -25,6 +25,21 @@ sub = tab <> "sub"
 i_div = tab <> "div" -- `div` was ambiguous
 zero = "$zero"
 
+-- Branches
+beq, bne, bge, bgt, ble, blt :: String
+beq = tab <> "beq"
+bne = tab <> "bne"
+bge = tab <> "bge"
+bgt = tab <> "bgt"
+ble = tab <> "ble"
+blt = tab <> "blt"
+
+-- Boolean -- all ambiguous without the "b_"
+b_not, b_and, b_or :: String
+b_not = tab <> "not"
+b_and = tab <> "and"
+b_or = tab <> "or"
+
 -- Jumps & Memory access
 goto, li, lis, jal, jr, la, move, mfhi, mflo :: String
 goto = tab <> "j"
@@ -225,19 +240,37 @@ mapper' registerAssignment stringsMap tac =
             i_div <> " " <> getValue y <> " " <> getValue z <> "\n" <>
             mfhi <> " " <> getValue x
 
+        ThreeAddressCode Eq (Just x) (Just y) (Just label) ->
+            beq <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Neq (Just x) (Just y) (Just label) ->
+            bne <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Lt (Just x) (Just y) (Just label) ->
+            blt <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Gt (Just x) (Just y) (Just label) ->
+            bgt <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Lte (Just x) (Just y) (Just label) ->
+            ble <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Gte (Just x) (Just y) (Just label) ->
+            bge <> " " <> getValue x <> " " <> getValue y <> " " <> show label
+
+        ThreeAddressCode Not (Just x) (Just y) _ ->
+            b_not <> " " <> getValue x <> " " <> getValue y
+
+        ThreeAddressCode And (Just x) (Just y) (Just z) ->
+            b_and <> " " <> getValue x <> " " <> getValue y <> " " <> getValue z
+
+        ThreeAddressCode Or (Just x) (Just y) (Just z) ->
+            b_or <> " " <> getValue x <> " " <> getValue y <> " " <> getValue z
+
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode Not (Just x) (Just y) _ ->
-        -- ThreeAddressCode And (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode Or (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode If Nothing (Just b) (Just label) ->
         -- ThreeAddressCode If Nothing (Just b) Nothing ->
-        -- ThreeAddressCode Eq (Just x) (Just y) (Just label) ->
-        -- ThreeAddressCode Neq (Just x) (Just y) (Just label) ->
-        -- ThreeAddressCode Lt (Just x) (Just y) (Just label) ->
-        -- ThreeAddressCode Gt (Just x) (Just y) (Just label) ->
-        -- ThreeAddressCode Lte (Just x) (Just y) (Just label) ->
-        -- ThreeAddressCode Gte (Just x) (Just y) (Just label) ->
         -- ThreeAddressCode Get (Just x) (Just y) (Just i) ->
         -- ThreeAddressCode Set (Just x) (Just i) (Just y) ->
         -- ThreeAddressCode New (Just x) (Just size) Nothing ->
