@@ -26,11 +26,12 @@ i_div = tab <> "div" -- `div` was ambiguous
 zero = "$zero"
 
 -- Branches
-beq, bne, bge, bgt, ble, blt :: String
+beq, bne, bge, bgt, bgtz, ble, blt :: String
 beq = tab <> "beq"
 bne = tab <> "bne"
 bge = tab <> "bge"
 bgt = tab <> "bgt"
+bgtz = tab <> "bgtz"
 ble = tab <> "ble"
 blt = tab <> "blt"
 
@@ -275,10 +276,11 @@ mapper' registerAssignment stringsMap tac =
         ThreeAddressCode Or (Just x) (Just y) (Just z) ->
             b_or <> " " <> getValue x <> " " <> getValue y <> " " <> getValue z
 
+        ThreeAddressCode If Nothing (Just b) (Just label) ->
+            bgtz <> " " <> getValue b <> " " <> show label
+
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode If Nothing (Just b) (Just label) ->
-        -- ThreeAddressCode If Nothing (Just b) Nothing ->
         -- ThreeAddressCode Get (Just x) (Just y) (Just i) ->
         -- ThreeAddressCode Set (Just x) (Just i) (Just y) ->
         -- ThreeAddressCode New (Just x) (Just size) Nothing ->
