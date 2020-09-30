@@ -16,11 +16,18 @@ import qualified FireLink.FrontEnd.SymTable as ST
 import qualified Data.Map
 import qualified Data.Set
 
-tab, add, sub, subs, goto, li, lis, jal, jr, la, move, zero :: String
+-- Operations
+tab, add, mul, i_div, sub, subs, zero :: String
 tab = replicate 4 ' '
 add = tab <> "add"
+mul = tab <> "mul"
 sub = tab <> "sub"
+i_div = tab <> "div" -- `div` was ambiguous
 subs = tab <> "sub.s"
+zero = "$zero"
+
+-- Jumps & Memory access
+goto, li, lis, jal, jr, la, move, mfhi, mflo :: String
 goto = tab <> "j"
 li = tab <> "li"
 lis = tab <> "li.s"
@@ -28,7 +35,8 @@ jal = tab <> "jal"
 jr = tab <> "jr"
 la = tab <> "la"
 move = tab <> "move"
-zero = "$zero"
+mfhi = tab <> "mfhi"
+mflo = tab <> "mflo"
 
 syscall :: Int -> String
 syscall code =
@@ -188,12 +196,22 @@ mapper' registerAssignment stringsMap tac =
         ThreeAddressCode (Cast _ _) a@(Just x) b@(Just y) _ ->
             mapper' registerAssignment stringsMap (ThreeAddressCode Assign a b Nothing)
 
+        -- ?INFO: ints only for now
+        ThreeAddressCode Mult (Just x) (Just y) (Just z) ->
+            mul <> " " <> getValue x <> " " <> getValue y <> " " <> getValue z <> "\n"
+
+        -- ?INFO: ints only for now
+        ThreeAddressCode Div (Just x) (Just y) (Just z) ->
+            i_div <> " " <> getValue y <> " " <> getValue z <> "\n" <>
+            mflo <> " " <> getValue x
+
+        -- ?INFO: ints only for now
+        ThreeAddressCode Mod (Just x) (Just y) (Just z) ->
+            i_div <> " " <> getValue y <> " " <> getValue z <> "\n" <>
+            mfhi <> " " <> getValue x
+
         -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
         -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode Mult (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode Div (Just x) (Just y) (Just z) ->
-        -- ThreeAddressCode Mod (Just x) (Just y) (Just z) ->
-
         -- ThreeAddressCode Not (Just x) (Just y) _ ->
         -- ThreeAddressCode And (Just x) (Just y) (Just z) ->
         -- ThreeAddressCode Or (Just x) (Just y) (Just z) ->
