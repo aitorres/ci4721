@@ -63,6 +63,10 @@ mapper' :: RegisterAssignment -> Data.Map.Map String String -> TAC -> String
 mapper' registerAssignment stringsMap tac =
     let getValue :: OperandType -> String
         getValue (Id x)            = show $ registerAssignment Data.Map.! x
+        getValue (Constant (x, TrileanTAC)) = case x of
+            "true" -> "1"
+            "false" -> "0"
+            _ -> "Ooopsie! I am yet undiscovered!"
         getValue (Constant (x, _)) = x
 
         getStringKey :: String -> String
@@ -119,7 +123,11 @@ mapper' registerAssignment stringsMap tac =
                 Constant (c, CharTAC) ->
                     liToReg (getValue x) (getValue y)
 
-                -- TODO: other assignments?
+                Constant (c, TrileanTAC) ->
+                    case c of
+                        "true" -> liToReg (getValue x) "1"
+                        "false" -> liToReg (getValue x) "0"
+                        _ -> error "I still live in a binary world :-("
 
                 _ ->
                     move <> " " <> (getValue x) <> " " <> (getValue y)
@@ -165,6 +173,11 @@ mapper' registerAssignment stringsMap tac =
                             syscall 1
 
                         SmallIntTAC ->
+                            move <> " $a0 " <> (getValue e) <> "\n" <>
+                            syscall 1
+
+                        -- assume int since it's either 1 or 0
+                        TrileanTAC ->
                             move <> " $a0 " <> (getValue e) <> "\n" <>
                             syscall 1
 
