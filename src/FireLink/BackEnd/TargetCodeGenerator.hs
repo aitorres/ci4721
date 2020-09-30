@@ -2,7 +2,7 @@ module FireLink.BackEnd.TargetCodeGenerator (mapper)
 
 where
 
-import Data.List                                  (intercalate)
+import Data.List                                  (intercalate, isInfixOf)
 import Data.Maybe                                 (catMaybes)
 import Data.Monoid                                ((<>))
 import FireLink.BackEnd.CodeGenerator             (OperandType, SimpleType (..),
@@ -17,13 +17,12 @@ import qualified Data.Map
 import qualified Data.Set
 
 -- Operations
-tab, add, mul, i_div, sub, subs, zero :: String
+tab, add, mul, i_div, sub, zero :: String
 tab = replicate 4 ' '
 add = tab <> "add"
 mul = tab <> "mul"
 sub = tab <> "sub"
 i_div = tab <> "div" -- `div` was ambiguous
-subs = tab <> "sub.s"
 zero = "$zero"
 
 -- Jumps & Memory access
@@ -53,8 +52,12 @@ simpleTypeFromDictEntry dE =
             else if s == ST.sign then CharTAC
             else if s == ST.bonfire then TrileanTAC
             else if s == ST.void then BigIntTAC -- TODO: is this right? do we even have pointers?
-            else error "I'm sorry, this type is not supported :-("
-        _ -> error "perro"
+            else if isInfixOf "_alias_" (show s) then error "I specifically don't know how to recover this info sox"
+            else error $ "I'm sorry, this simple type is not supported :-( " ++ show s
+
+        ST.Compound _ _ -> StringTAC
+
+        _ -> error "You're trying to operate on an unsupported type :-("
 
 mapper' :: RegisterAssignment -> Data.Map.Map String String -> TAC -> String
 mapper' registerAssignment stringsMap tac =
@@ -80,21 +83,17 @@ mapper' registerAssignment stringsMap tac =
 
         ThreeAddressCode Minus (Just x) (Just y) Nothing ->
             case y of
-
-                Constant (c, BigIntTAC) ->
+                -- ?INFO: Works for int, not float
+                Constant (c, _) ->
                     sub <> " " <> getValue x <> " " <> zero <> " " <> c
-
-                Constant (c, SmallIntTAC) ->
-                    sub <> " " <> getValue x <> " " <> zero <> " " <> c
-
-                Constant (c, FloatTAC) ->
-                    subs <> " " <> getValue x <> " " <> zero <> " " <> c
 
                 -- always integer
                 Id (TACTemporal _ _) ->
                     sub <> " " <> getValue x <> " " <> zero <> " " <> getValue y
 
-                -- Id (TACVariable)
+                -- ?INFO: Works for int, not float
+                Id (TACVariable _ _) ->
+                    sub <> " " <> getValue x <> " " <> zero <> " " <> getValue y
 
         (ThreeAddressCode NewLabel Nothing (Just label) Nothing) ->
             show label <> ":"
@@ -122,7 +121,6 @@ mapper' registerAssignment stringsMap tac =
 
                 -- TODO: other assignments?
 
-                -- TODO: add support for float assignments
                 _ ->
                     move <> " " <> (getValue x) <> " " <> (getValue y)
 
@@ -173,6 +171,10 @@ mapper' registerAssignment stringsMap tac =
                         CharTAC ->
                             move <> " $a0 " <> (getValue e) <> "\n" <>
                             syscall 11
+
+                        StringTAC ->
+                            move <> " " <> show (Register "a0") <> " " <> getValue e <> "\n" <>
+                            syscall 4
 
                         _ -> red <> bold <> "# not implemented yet" <> nocolor
 
