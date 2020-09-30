@@ -243,9 +243,8 @@ initialStep flowGraph@(numberedBlocks, graph) dict = (preProcessCode, graph)
         isTacLabelFun :: TAC -> Bool
         isTacLabelFun (ThreeAddressCode NewLabel _ (Just (Label (l : _))) _) =
             -- case for _main function, that isn't on symtable
-            l /= '_' &&
-            -- jump labels, functions do not begin with digits
-            not (isDigit l)
+            -- jump labels, functions do not begin with _
+            l /= '_'
 
         isTacLabelFun _ = False
 

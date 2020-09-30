@@ -106,7 +106,7 @@ newLabel :: CodeGenMonad (Operand a b)
 newLabel = do
     state@CodeGenState {cgsNextLabel = label} <- get
     put $ state{cgsNextLabel = label + 1}
-    return $ Label $ show label
+    return $ Label $ '_' : show label
 
 genGoTo :: OperandType -> CodeGenMonad ()
 genGoTo label = gen [ThreeAddressCode
