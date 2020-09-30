@@ -169,6 +169,10 @@ mapper' registerAssignment stringsMap tac =
                     liToReg "$a0" c <>
                     syscall 1
 
+                e@(Constant (c, TrileanTAC)) ->
+                    liToReg "$a0" (getValue e) <>
+                    syscall 1
+
                 -- print 1.5
                 -- this would use syscall 2
                 Constant (c, FloatTAC) ->
@@ -213,6 +217,10 @@ mapper' registerAssignment stringsMap tac =
                     move <> " " <> getValue e <> " " <> "$v0"
 
                 SmallIntTAC ->
+                    syscall 5 <> "\n" <>
+                    move <> " " <> getValue e <> " " <> "$v0"
+
+                TrileanTAC ->
                     syscall 5 <> "\n" <>
                     move <> " " <> getValue e <> " " <> "$v0"
 
