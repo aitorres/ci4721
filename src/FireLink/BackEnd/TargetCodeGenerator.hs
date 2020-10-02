@@ -17,13 +17,13 @@ import qualified Data.Map
 import qualified Data.Set
 
 -- Operations
-tab, add, mul, i_div, sub, zero :: String
+tab, add, addi, mul, i_div, sub :: String
 tab = replicate 4 ' '
 add = tab <> "add"
+addi = tab <> "addi"
 mul = tab <> "mul"
 sub = tab <> "sub"
 i_div = tab <> "div" -- `div` was ambiguous
-zero = "$zero"
 
 -- Branches
 beq, bne, bge, bgt, bgtz, ble, blt :: String
@@ -42,7 +42,7 @@ b_and = tab <> "and"
 b_or = tab <> "or"
 
 -- Jumps & Memory access
-goto, li, lis, jal, jr, la, move, mfhi, mflo :: String
+goto, li, lis, jal, jr, la, move, sw, lw, mfhi, mflo :: String
 goto = tab <> "j"
 li = tab <> "li"
 lis = tab <> "li.s"
@@ -50,12 +50,23 @@ jal = tab <> "jal"
 jr = tab <> "jr"
 la = tab <> "la"
 move = tab <> "move"
+sw = tab <> "sw"
+lw = tab <> "lw"
 mfhi = tab <> "mfhi"
 mflo = tab <> "mflo"
 
+-- Special Registers
+ra, sp, sp0, v0, zero :: String
+ra = "$ra"
+sp = "$sp"
+sp0 = "0($sp)"
+v0 = "$v0"
+zero = "$zero"
+last_ra = "last_ra"
+
 syscall :: Int -> String
 syscall code =
-    li <> " " <> show (Register "v0") <> " " <> show code <> "\n" <> tab <> "syscall"
+    li <> " " <> v0 <> " " <> show code <> "\n" <> tab <> "syscall"
 
 simpleTypeFromDictEntry :: ST.DictionaryEntry -> SimpleType
 simpleTypeFromDictEntry dE =
@@ -119,10 +130,12 @@ mapper' registerAssignment stringsMap tac =
             show label <> ":"
 
         ThreeAddressCode Call Nothing (Just l) (Just n) ->
-            jal <> " " <> show l
+            sw <> " " <> ra <> " " <> last_ra <> "\n" <>
+            jal <> " " <> show l <> "\n" <>
+            lw <> " " <> ra <> " " <> last_ra
 
         ThreeAddressCode Return Nothing Nothing Nothing ->
-            jr <> " $ra"
+            jr <> " " <> ra <> "\n"
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
             case y of
@@ -279,14 +292,25 @@ mapper' registerAssignment stringsMap tac =
         ThreeAddressCode If Nothing (Just b) (Just label) ->
             bgtz <> " " <> getValue b <> " " <> show label
 
-        -- ThreeAddressCode Store (Just (Id v)) Nothing Nothing ->
-        -- ThreeAddressCode Load (Just (Id v)) Nothing Nothing ->
+        -- ?INFO: assuming 4b words, what about floats & others? offset?
+        ThreeAddressCode Store (Just a@(Id v)) Nothing Nothing ->
+            sw <> " " <> getValue a <> " " <> sp0 <> "\n" <>
+            addi <> " " <> sp <> " " <> sp <> " " <> "-4"
+
+        -- ?INFO: assuming 4b words, what about floats & others? offset?
+        ThreeAddressCode Load (Just a@(Id v)) Nothing Nothing ->
+            addi <> " " <> sp <> " " <> sp <> " " <> "4" <> "\n" <>
+            lw <>  " " <> getValue a <> " " <> sp0
+
+        -- ?INFO: assuming 4b words, what about floats & others? offset?
+        ThreeAddressCode Param Nothing (Just p) Nothing ->
+            mapper' registerAssignment stringsMap $ ThreeAddressCode Store (Just p) Nothing Nothing
+
         -- ThreeAddressCode Get (Just x) (Just y) (Just i) ->
         -- ThreeAddressCode Set (Just x) (Just i) (Just y) ->
         -- ThreeAddressCode New (Just x) (Just size) Nothing ->
         -- ThreeAddressCode Free Nothing (Just addr) Nothing ->
         -- ThreeAddressCode Ref (Just x) (Just y) Nothing ->
-        -- ThreeAddressCode Param Nothing (Just p) Nothing ->
         -- ThreeAddressCode Call Nothing (Just l) (Just n) ->
         -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
         -- ThreeAddressCode Return Nothing (Just t) Nothing ->
@@ -329,5 +353,5 @@ mapper regAssignment tacs = dataSegment <> textSegment
         textSegment = ".text\nmain:" : map (\t -> "# " <> (show t) <> "\n" <> (mapper' regAssignment stringsMap t) <> "\n") tacs
 
         dataSegment :: [String]
-        dataSegment = [".data"] <>
+        dataSegment = [".data", "last_ra: .word 1"] <>
             map (\(value, key) -> key <> ": .asciiz \"" <> value <> "\"") (Data.Map.toList stringsMap)
