@@ -1621,10 +1621,10 @@ instance TypeCheckable ST.Extra where
       else return T.TypeError -- This should not happen, but life is hard
 
   -- For the moment, ST.Compound only corresponds to string
-  getType (ST.Compound s _) = return $ T.StringT
+  getType (ST.Compound _ _) = return $ T.StringT
 
   -- For the moment, ST.CompoundRect only corresponds to array
-  getType (ST.CompoundRec s _ extra) = getType extra >>= \t -> return $ T.ArrayT t
+  getType (ST.CompoundRec _ _ extra) = getType extra >>= \t -> return $ T.ArrayT t
 
   getType (ST.Fields ST.Callable scope) = do
     ST.SymTable {ST.stDict=dict} <- RWS.get
