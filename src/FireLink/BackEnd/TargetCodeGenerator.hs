@@ -129,12 +129,28 @@ mapper' registerAssignment stringsMap tac =
         (ThreeAddressCode NewLabel Nothing (Just label) Nothing) ->
             show label <> ":"
 
-        ThreeAddressCode Call Nothing (Just l) (Just n) ->
+        -- Proc call
+        -- !TODO: only the most recent $ra is stored, this wont' work for "recursive" or stacked calls
+        ThreeAddressCode Call Nothing (Just l) _ ->
             sw <> " " <> ra <> " " <> last_ra <> "\n" <>
             jal <> " " <> show l <> "\n" <>
             lw <> " " <> ra <> " " <> last_ra
 
+        -- Proc return (or main return)
         ThreeAddressCode Return Nothing Nothing Nothing ->
+            jr <> " " <> ra <> "\n"
+
+        -- Func call
+        -- !TODO: only the most recent $ra is stored, this wont' work for "recursive" or stacked calls
+        ThreeAddressCode Call (Just t) (Just l) _ ->
+            sw <> " " <> ra <> " " <> last_ra <> "\n" <>
+            jal <> " " <> show l <> "\n" <>
+            lw <> " " <> ra <> " " <> last_ra <> "\n" <>
+            move <> " " <> getValue t <> " " <> v0
+
+        -- Func return
+        ThreeAddressCode Return Nothing (Just t) Nothing ->
+            move <> " " <> v0 <> " " <> getValue t <> "\n" <>
             jr <> " " <> ra <> "\n"
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
@@ -311,9 +327,6 @@ mapper' registerAssignment stringsMap tac =
         -- ThreeAddressCode New (Just x) (Just size) Nothing ->
         -- ThreeAddressCode Free Nothing (Just addr) Nothing ->
         -- ThreeAddressCode Ref (Just x) (Just y) Nothing ->
-        -- ThreeAddressCode Call Nothing (Just l) (Just n) ->
-        -- ThreeAddressCode Call (Just t) (Just l) (Just n) ->
-        -- ThreeAddressCode Return Nothing (Just t) Nothing ->
 
         ThreeAddressCode GoTo Nothing Nothing (Just label) ->
             goto <> " " <> show label
