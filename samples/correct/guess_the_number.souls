@@ -12,13 +12,13 @@ hello ashen one
         trust your inventory
           r eq number:
             traveling somewhere
-              -- with orange soapstone say @You got it!\n@ \
+              with orange soapstone say @You got it!\n@ \
               go back
             you died
-          -- liar!:
-            -- traveling somewhere
-              -- with orange soapstone say @That's not it... Try again!\n@
-            -- you died
+          liar!:
+            traveling somewhere
+              with orange soapstone say @That's not it... Try again!\n@
+            you died
         inventory closed
       you died
     covenant left

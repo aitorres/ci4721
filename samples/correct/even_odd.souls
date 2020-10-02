@@ -49,7 +49,7 @@ with
     var n of type humanity,
     var b of type bonfire
 in your inventory
-    -- with orange soapstone say @Enter n: @ \
+    with orange soapstone say @Enter n: @ \
     transpose into n \
     b <<= summon even granting n to the knight \
     with orange soapstone say b

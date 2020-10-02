@@ -31,11 +31,11 @@ hello ashen one
     var c of type hollow,
     var valid of type bonfire
   in your inventory
-    -- with orange soapstone say @Enter the length of the first side:@ \
+    with orange soapstone say @Enter the length of the first side:@ \
     transpose into a \
-    -- with orange soapstone say @Enter the length of the second side:@ \
+    with orange soapstone say @Enter the length of the second side:@ \
     transpose into b \
-    -- with orange soapstone say @Enter the length of the third side:@ \
+    with orange soapstone say @Enter the length of the third side:@ \
     transpose into c \
     valid <<= summon is_valid_triangle
       granting a, b, c to the knight\

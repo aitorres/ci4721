@@ -22,7 +22,7 @@ traveling somewhere
 with
     var n of type humanity
 in your inventory
-    -- with orange soapstone say @Enter n: @ \
+    with orange soapstone say @Enter n: @ \
     transpose into n \
     n <<= summon fact granting n to the knight \
     with orange soapstone say n
