@@ -1,0 +1,34 @@
+hello ashen one
+
+traveling somewhere
+with
+    var n of type humanity,
+    var i of type humanity <<= 0
+in your inventory
+    with orange soapstone say @Enter your number: @ \
+    transpose into n \
+
+    while the n neq 1 covenant is active:
+        traveling somewhere
+            trust your inventory
+                n % 2 eq 0:
+                    traveling somewhere
+                        n <<= n / 2
+                    you died
+                liar!:
+                    traveling somewhere
+                        n <<= 3 * n + 1
+                    you died
+            inventory closed \
+            i <<= i + 1
+        you died
+    covenant left \
+
+    with orange soapstone say @Your number is now: @ \
+    with orange soapstone say n \
+    with orange soapstone say @ and it took me @ \
+    with orange soapstone say i \
+    with orange soapstone say @ tries.@
+you died
+
+farewell ashen one
