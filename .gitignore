@@ -3,3 +3,7 @@
 *.vscode
 *.code-workspace
 .local
+*.asm
+*.s
+*.jar
+*.java
