@@ -201,17 +201,25 @@ genIndexAccess' array indexOperand = case expAst array of
 genParams :: [Expr] -> CodeGenMonad Int
 genParams params = do
     operands <- mapM genCode' params
-    gen $ map createParam operands
+    mapM_ createParam operands
     return $ length params
     where
-        createParam :: OperandType -> TAC
-        createParam o = TAC.ThreeAddressCode
-            { TAC.tacOperand = TAC.Param
-            , TAC.tacLvalue = Nothing
-            , TAC.tacRvalue1 = Just o
-            , TAC.tacRvalue2 = Nothing
-            }
-
+        -- ?INFO(Andres): Solves issue of `param 89`
+        createParam :: OperandType -> CodeGenMonad ()
+        createParam o = do
+            midId <- TAC.Id <$> newtemp
+            tell [TAC.ThreeAddressCode
+                { TAC.tacOperand = TAC.Assign
+                , TAC.tacLvalue = Just midId
+                , TAC.tacRvalue1 = Just o
+                , TAC.tacRvalue2 = Nothing
+                },
+                TAC.ThreeAddressCode
+                { TAC.tacOperand = TAC.Param
+                , TAC.tacLvalue = Nothing
+                , TAC.tacRvalue1 = Just midId
+                , TAC.tacRvalue2 = Nothing
+                }]
 
 genOp2Code :: TAC.Operation -> OperandType -> OperandType -> CodeGenMonad OperandType
 genOp2Code operation lId rId = do
