@@ -159,10 +159,17 @@ genIndexAccess' array indexOperand = case expAst array of
         contents <- getContents $ ST.extractTypeFromExtra idEntry
         width <- typeWidth contents
         resultAddress <- TAC.Id <$> newtemp
+        midId <- TAC.Id <$> newtemp
         gen [TAC.ThreeAddressCode
+                { TAC.tacOperand = TAC.Assign
+                , TAC.tacLvalue = Just midId
+                , TAC.tacRvalue1 = Just indexOperand
+                , TAC.tacRvalue2 = Nothing
+                },
+                TAC.ThreeAddressCode
                 { TAC.tacOperand = TAC.Mult
                 , TAC.tacLvalue = Just resultAddress
-                , TAC.tacRvalue1 = Just indexOperand
+                , TAC.tacRvalue1 = Just midId
                 , TAC.tacRvalue2 = Just width
                 }]
         return (resultAddress, contents, TAC.Id $ TACVariable idEntry (getOffset idEntry))
@@ -171,10 +178,17 @@ genIndexAccess' array indexOperand = case expAst array of
         contents <- getContents $ ST.Simple contents'
         width <- typeWidth contents
         t <- TAC.Id <$> newtemp
+        midId <- TAC.Id <$> newtemp
         gen [TAC.ThreeAddressCode
+                { TAC.tacOperand = TAC.Assign
+                , TAC.tacLvalue = Just midId
+                , TAC.tacRvalue1 = Just offset
+                , TAC.tacRvalue2 = Nothing
+                },
+                TAC.ThreeAddressCode
                 { TAC.tacOperand = TAC.Add
                 , TAC.tacLvalue = Just t
-                , TAC.tacRvalue1 = Just offset
+                , TAC.tacRvalue1 = Just midId
                 , TAC.tacRvalue2 = Just indexOperand
                 }]
         resultAddress <- TAC.Id <$> newtemp
