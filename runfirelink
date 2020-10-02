@@ -1,16 +1,12 @@
 #!/bin/sh
 
 if which spim > /dev/null; then
-    if [ $1 ]; then
-        stack run -- -c "$1" > "temp.asm"
-        if [ $? -eq 0 ]; then
-            spim -file "temp.asm" | sed -n '1!p' # removing first line that loads exceptions file
-            echo "" # line break
-        fi
-        rm "temp.asm" > /dev/null
-    else
-       echo "First argument required"
+    stack run -- -c "$1" > "temp.asm"
+    if [ $? -eq 0 ]; then
+        spim -file "temp.asm" | sed -n '1!p' # removing first line that loads exceptions file
+        echo "" # line break
     fi
+    rm "temp.asm" > /dev/null
 else
     echo "spim must be installed"
 fi
