@@ -120,10 +120,20 @@ genCodeForInstruction (InstInitArray arrayId@(G.Id _ s)) _ = do
             putArrayEntrySize typeName temp
             allocatedSize <- buildFromType t
             finalAllocatedSize <- Id <$> newtemp
+
+            -- ?INFO(Andres): Solves issue of `mul $reg 1 7`
+            midId <- Id <$> newtemp
+            gen [ThreeAddressCode
+                    { tacOperand = Assign
+                    , tacLvalue = Just midId
+                    , tacRvalue1 = Just allocatedSize
+                    , tacRvalue2 = Nothing
+                    }]
+
             gen [ThreeAddressCode
                 { tacOperand = Mult
                 , tacLvalue = Just finalAllocatedSize
-                , tacRvalue1 = Just allocatedSize
+                , tacRvalue1 = Just midId
                 , tacRvalue2 = Just operand
                 }]
             return finalAllocatedSize

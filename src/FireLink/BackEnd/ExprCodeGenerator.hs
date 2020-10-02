@@ -83,7 +83,6 @@ genCodeForExpr T.TrileanT exp = do
     return lvalue
 
 genCodeForExpr _ (Op2 op lexpr rexpr) = do
-    -- TODO: esto esta generando cosas tipo "n := 1 + 2"
     lId <- genCode' lexpr
     rId <- genCode' rexpr
     genOp2Code operation lId rId
