@@ -1,0 +1,54 @@
+hello ashen one
+
+spell f
+requesting
+    val n of type humanity
+to the estus flask
+    traveling somewhere
+        with orange soapstone say @Uno: @ \
+        with orange soapstone say n \
+        with orange soapstone say |\n| \
+        go back
+    you died
+ashen estus flask consumed
+
+spell f2
+requesting
+    val n of type humanity,
+    val r of type humanity
+to the estus flask
+    traveling somewhere
+        with orange soapstone say @Dos: @ \
+        with orange soapstone say n + r \
+        with orange soapstone say |\n| \
+        go back
+    you died
+ashen estus flask consumed
+
+spell f3
+requesting
+    val n of type humanity,
+    val r of type humanity,
+    val k of type humanity
+to the estus flask
+    traveling somewhere
+        with orange soapstone say @Tres: @ \
+        with orange soapstone say n + r + k \
+        with orange soapstone say |\n| \
+        go back
+    you died
+ashen estus flask consumed
+
+
+traveling somewhere
+with
+    var n of type humanity
+in your inventory
+    cast f offering 1 to the estus flask \
+    cast f2 offering 1, 2 to the estus flask \
+    cast f3 offering 1, 2, 3 to the estus flask \
+    cast f2 offering 1, 2 to the estus flask \
+    cast f3 offering 1, 2, 3 to the estus flask
+you died
+
+farewell ashen one

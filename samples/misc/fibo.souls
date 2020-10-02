@@ -1,0 +1,22 @@
+hello ashen one
+
+traveling somewhere
+with
+    var n of type humanity,
+    var i of type humanity <<= 1,
+    var f of type humanity <<= 1
+in your inventory
+    with orange soapstone say @Méteme n: @ \
+    transpose into n \
+
+    upgrading i with 1 soul until level n + 1
+        traveling somewhere
+            f <<= f * i
+        you died
+    max level reached \
+
+    with orange soapstone say @Tu factorial es: @ \
+    with orange soapstone say f
+you died
+
+farewell ashen one
