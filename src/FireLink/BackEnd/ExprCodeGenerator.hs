@@ -367,6 +367,7 @@ mapOp2ToTacOperation op = case op of
     Multiply  -> TAC.Mult
     Divide    -> TAC.Div
     Mod       -> TAC.Mod
+    _         -> error $ "Unsupported binadic operation: " ++ show op
 
 complement :: TAC.Operation -> TAC.Operation
 complement TAC.Lt  = TAC.Gte
