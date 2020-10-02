@@ -88,7 +88,7 @@ hello ashen one
         traveling somewhere
           with orange soapstone say @x1: @ \
           with orange soapstone say x1 \
-          with orange soapstone say @\n@ >-< @x2: @ \
+          with orange soapstone say @\nx2: @ \
           with orange soapstone say x2 \
           with orange soapstone say @\n@
         you died
