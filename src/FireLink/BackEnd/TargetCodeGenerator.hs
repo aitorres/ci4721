@@ -62,7 +62,6 @@ sp = "$sp"
 sp0 = "0($sp)"
 v0 = "$v0"
 zero = "$zero"
-last_ra = "last_ra"
 
 syscall :: Int -> String
 syscall code =
@@ -130,28 +129,30 @@ mapper' registerAssignment stringsMap tac =
             show label <> ":"
 
         -- Proc call
-        -- !TODO: only the most recent $ra is stored, this wont' work for "recursive" or stacked calls
         ThreeAddressCode Call Nothing (Just l) _ ->
-            sw <> " " <> ra <> " " <> last_ra <> "\n" <>
-            jal <> " " <> show l <> "\n" <>
-            lw <> " " <> ra <> " " <> last_ra
+            jal <> " " <> show l <> "\n"
 
         -- Proc return (or main return)
         ThreeAddressCode Return Nothing Nothing Nothing ->
-            jr <> " " <> ra <> "\n"
+            -- ?INFO: first thing we did after entering function was pushing
+            -- ?INFO: $ra so now we pop it before leaving
+            addi <> " " <> sp <> " " <> sp <> " " <> "4" <> "\n" <>
+            lw <>  " " <> ra <> " " <> sp0  <> "\n" <>
+            jr <> " " <> ra
 
         -- Func call
-        -- !TODO: only the most recent $ra is stored, this wont' work for "recursive" or stacked calls
         ThreeAddressCode Call (Just t) (Just l) _ ->
-            sw <> " " <> ra <> " " <> last_ra <> "\n" <>
             jal <> " " <> show l <> "\n" <>
-            lw <> " " <> ra <> " " <> last_ra <> "\n" <>
             move <> " " <> getValue t <> " " <> v0
 
         -- Func return
         ThreeAddressCode Return Nothing (Just t) Nothing ->
             move <> " " <> v0 <> " " <> getValue t <> "\n" <>
-            jr <> " " <> ra <> "\n"
+            -- ?INFO: first thing we did after entering function was pushing
+            -- ?INFO: $ra so now we pop it before leaving
+            addi <> " " <> sp <> " " <> sp <> " " <> "4" <> "\n" <>
+            lw <>  " " <> ra <> " " <> sp0 <> "\n" <>
+            jr <> " " <> ra
 
         ThreeAddressCode Assign (Just x) (Just y) _ ->
             case y of
@@ -321,6 +322,11 @@ mapper' registerAssignment stringsMap tac =
         -- ?INFO: assuming 4b words, what about floats & others? offset?
         ThreeAddressCode Param Nothing (Just p) Nothing ->
             mapper' registerAssignment stringsMap $ ThreeAddressCode Store (Just p) Nothing Nothing
+
+        -- ?INFO: workaround for $ra preservation
+        ThreeAddressCode Param Nothing Nothing Nothing ->
+            sw <> " " <> ra <> " " <> sp0 <> "\n" <>
+            addi <> " " <> sp <> " " <> sp <> " " <> "-4"
 
         -- ThreeAddressCode Get (Just x) (Just y) (Just i) ->
         -- ThreeAddressCode Set (Just x) (Just i) (Just y) ->

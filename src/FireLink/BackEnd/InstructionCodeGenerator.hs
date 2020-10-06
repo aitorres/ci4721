@@ -77,6 +77,12 @@ instance GenerateCode Program where
             genBlock (funName, codeblock@(CodeBlock _ maxOffset)) = do
                 setTempOffset $ alignedOffset maxOffset
                 genLabel $ Label funName
+                gen [ThreeAddressCode
+                    { tacOperand = Param
+                    , tacLvalue = Nothing
+                    , tacRvalue1 = Nothing
+                    , tacRvalue2 = Nothing
+                    }]
                 t <- newtemp
                 putArrayOffsetVar t
                 genIdAssignment (Id t) $ Constant ("TO_REPLACE", BigIntTAC)
