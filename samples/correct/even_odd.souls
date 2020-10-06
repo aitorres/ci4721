@@ -52,7 +52,16 @@ in your inventory
     with orange soapstone say @Enter n: @ \
     transpose into n \
     b <<= summon even granting n to the knight \
-    with orange soapstone say b
+    trust your inventory
+        b:
+        traveling somewhere
+            with orange soapstone say @EVEN!\n@
+        you died
+        liar!:
+        traveling somewhere
+            with orange soapstone say @NOT EVEN, FAKE NEWS, ODD!\n@
+        you died
+    inventory closed
 you died
 
 farewell ashen one
