@@ -5,6 +5,9 @@ requesting
     val n of type humanity
 with skill of type bonfire
     traveling somewhere
+        with orange soapstone say @Entering even with @ \
+        with orange soapstone say n \
+        with orange soapstone say @\n@ \
         trust your inventory
         n eq 0:
             traveling somewhere
@@ -27,6 +30,9 @@ requesting
     val n of type humanity
 with skill of type bonfire
     traveling somewhere
+        with orange soapstone say @Entering odd with @ \
+        with orange soapstone say n \
+        with orange soapstone say @\n@ \
         trust your inventory
         n eq 0:
             traveling somewhere
